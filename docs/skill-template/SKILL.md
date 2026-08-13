@@ -1,35 +1,58 @@
 ---
 name: skill-name-here
 description: >-
-  清晰简短地用第三人称描述该 Skill 的功能及触发时机。
-  例如：“当用户需要对项目需求进行澄清、补全意图或定义范围时使用此 Skill。”
+  Produce <the concrete deliverable this skill exists to create>. Use when the user asks
+  about <trigger term>, <synonym>, <tool or file name>, <error string>, or <非英文触发词>.
 ---
 
-# Skill 名称 (如: Clarify Intent)
+# Human Readable Skill Name
 
-## 目的与触发场景
-简要说明该流程节点在 `Frank_Agentic_Workflow.md` 中的位置与目标。
+> This is the authoring template. It is deliberately **not** inside `skills/`, because it
+> is not an installable skill. Copy this directory to `skills/<slug>/` and replace every
+> angle-bracket placeholder. Rules and tiers: [`../skill-authoring-standard.md`](../skill-authoring-standard.md).
 
-## 输入产物 (Inputs Required)
-- 用户原始需求 / 想法 / 缺陷报告
-- 相关代码上下文（如有）
+## Workflow
 
-## 执行步骤 (Execution Steps)
-1. **初步分析**：分析用户需求的完整度与潜在风险。
-2. **提问与澄清**：引导用户确认以下核心要素：
-   - 核心功能点 (Functional Requirements)
-   - 非功能性需求 (Performance/Security/UI)
-   - 边界条件与限制 (Constraints)
-3. **成果输出**：格式化整理澄清结果。
+1. Clarify scope before acting. State what you will and will not touch.
+2. Load `references/<file>.md` **when** <the exact condition that makes it relevant>.
+3. Load `references/<other>.md` **when** <a different, non-overlapping condition>.
+4. Produce the deliverable described under Output Contract.
+5. State what remains unverified.
 
-## 规范输出模板 (Output Template)
-```markdown
-### 需求澄清汇总
-- **原始意图**：...
-- **确认范围**：...
-- **遗留/需用户决策点**：...
-```
+Each step is an imperative. Each reference is named together with the condition that
+triggers loading it — a reference the model must guess at is a reference it will not load.
 
-## 校验与质量关卡 (Verification Checklist)
-- [ ] 所有模糊点均已得到明确答复
-- [ ] 影响范围已在代码库中初步确认
+## <Domain Rule Section>
+
+Rename this to the risk this skill actually carries: Safety Gates, Privacy Rules, Data
+Handling, Rollback Rules. Write conditions and required behaviours, not warnings.
+
+- Never <the specific action that must not happen>.
+- Prefer <safe approach> over <risky approach> when <condition>.
+- Before <irreversible action>, produce <the artifact that makes it reversible>.
+
+Multi-condition gates are stated as all-must-be-true lists:
+
+Proceed only when all of the following hold:
+1. <condition>
+2. <condition>
+3. <a rollback path is documented>
+
+## Output Contract
+
+Every item must be verifiable by reading the output alone. If a reader cannot tell whether
+an item is present, it is not a contract item.
+
+- <Named section the deliverable must contain.>
+- <A classification, using the skill's own named taxonomy.>
+- <Verification steps: how the reader confirms this is correct.>
+- <Rollback steps, where the work is reversible.>
+- <What was not done, and why.>
+
+## References
+
+- `references/<file>.md`: <what it holds> — load when <condition>.
+- `references/<other>.md`: <what it holds> — load when <condition>.
+
+Keep `references/` one level deep. Keep this file under 220 lines; move detail down a
+layer rather than growing this one.

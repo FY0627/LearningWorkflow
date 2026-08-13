@@ -1,0 +1,42 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate skill pack
+        run: python scripts/validate-pack.py .
+
+      - name: Check install script parses
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path './scripts/install.ps1').Path, [ref]$tokens, [ref]$errors
+          ) | Out-Null
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Host "ERROR: $($_.Message)" }
+            exit 1
+          }
+          Write-Host "OK: install.ps1 parses cleanly"
+
+      - name: Install script dry run
+        shell: pwsh
+        run: ./scripts/install.ps1 -Target all -WhatIf

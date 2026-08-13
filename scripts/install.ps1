@@ -1,40 +1,121 @@
 <#
 .SYNOPSIS
-    Frank Agentic Skill Package 安装/部署脚本
+    Install the skill pack into one or more agent skill directories.
+
+.DESCRIPTION
+    Copies every directory under skills/ that contains a SKILL.md into the skill
+    directory of the selected agent(s). Existing skills are never overwritten
+    silently: the script throws unless -Force is supplied.
+
+.PARAMETER Target
+    Which agent(s) to install for: claude, codex, gemini, or all. Defaults to claude.
+
+.PARAMETER DestinationRoot
+    Install to an explicit path instead of the well-known location for -Target.
+
+.PARAMETER Force
+    Overwrite skills that already exist at the destination.
+
+.EXAMPLE
+    ./scripts/install.ps1 -Target all -WhatIf
+    Show what would be installed for every agent without writing anything.
+
+.EXAMPLE
+    ./scripts/install.ps1 -Target claude -Force
+    Reinstall into ~/.claude/skills, replacing existing copies.
 #>
 
-param (
-    [string]$DestinationRoot = "$HOME\.gemini\config\skills",
+[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
+param(
+    [ValidateSet('claude', 'codex', 'gemini', 'all')]
+    [string[]]$Target = @('claude'),
+
+    [string]$DestinationRoot,
+
     [switch]$Force
 )
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
 
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$AgentsRoot = Split-Path -Parent $ScriptDir
-$SourceSkillsDir = Join-Path $AgentsRoot "skills"
+$RepoRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
+$SourceSkillsDir = Join-Path $RepoRoot 'skills'
 
-if (-not (Test-Path $SourceSkillsDir)) {
-    Write-Error "找不到 skills 源码目录: $SourceSkillsDir"
+if (-not (Test-Path -LiteralPath $SourceSkillsDir)) {
+    throw "Source skills directory not found: $SourceSkillsDir"
 }
 
-Write-Host "🚀 开始安装 Frank Agentic Skill Package..." -ForegroundColor Green
-Write-Host "📍 目标目录: $DestinationRoot" -ForegroundColor Cyan
-
-if (-not (Test-Path $DestinationRoot)) {
-    New-Item -ItemType Directory -Path $DestinationRoot -Force | Out-Null
+$KnownRoots = [ordered]@{
+    claude = Join-Path $HOME '.claude/skills'
+    codex  = Join-Path $HOME '.codex/skills'
+    gemini = Join-Path $HOME '.gemini/config/skills'
 }
 
-$skills = Get-ChildItem -Path $SourceSkillsDir -Directory
-foreach ($skill in $skills) {
-    $targetDir = Join-Path $DestinationRoot $skill.Name
-    if ((Test-Path $targetDir) -and (-not $Force)) {
-        Write-Host "  [跳过] $($skill.Name) 已存在。使用 -Force 参数覆盖安装。" -ForegroundColor Yellow
-        continue
+if ($DestinationRoot) {
+    $destinations = [ordered]@{ custom = $DestinationRoot }
+}
+elseif ($Target -contains 'all') {
+    $destinations = $KnownRoots
+}
+else {
+    $destinations = [ordered]@{}
+    foreach ($name in $Target) { $destinations[$name] = $KnownRoots[$name] }
+}
+
+# Only directories carrying a SKILL.md are installable skills. This deliberately
+# excludes templates and any scratch directory that ends up under skills/.
+$skills = Get-ChildItem -LiteralPath $SourceSkillsDir -Directory |
+    Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'SKILL.md') } |
+    Sort-Object Name
+
+if ($skills.Count -eq 0) {
+    throw "No installable skills found under $SourceSkillsDir (a skill needs a SKILL.md)."
+}
+
+Write-Host "Source: $SourceSkillsDir ($($skills.Count) skills)"
+
+$installed = 0
+$skipped = 0
+
+foreach ($entry in $destinations.GetEnumerator()) {
+    $agent = $entry.Key
+    $root = $entry.Value
+
+    Write-Host ""
+    Write-Host "Target [$agent] -> $root"
+
+    if (-not (Test-Path -LiteralPath $root)) {
+        if ($PSCmdlet.ShouldProcess($root, 'Create skills directory')) {
+            New-Item -ItemType Directory -Path $root -Force | Out-Null
+        }
     }
-    
-    Copy-Item -Path $skill.FullName -Destination $DestinationRoot -Recurse -Force
-    Write-Host "  [安装] $($skill.Name) -> $targetDir" -ForegroundColor Green
+
+    foreach ($skill in $skills) {
+        $targetDir = Join-Path $root $skill.Name
+
+        if ((Test-Path -LiteralPath $targetDir) -and (-not $Force)) {
+            throw "Refusing to overwrite existing skill: $targetDir`nRe-run with -Force to replace it."
+        }
+
+        if ($PSCmdlet.ShouldProcess($targetDir, 'Install skill')) {
+            if (Test-Path -LiteralPath $targetDir) {
+                Remove-Item -LiteralPath $targetDir -Recurse -Force
+            }
+            Copy-Item -LiteralPath $skill.FullName -Destination $root -Recurse -Force
+            Write-Host "  installed  $($skill.Name)"
+            $installed++
+        }
+        else {
+            Write-Host "  would install  $($skill.Name) -> $targetDir"
+            $skipped++
+        }
+    }
 }
 
-Write-Host "✅ 安装完成！" -ForegroundColor Green
+Write-Host ""
+if ($WhatIfPreference) {
+    Write-Host "Dry run complete: $skipped skill installation(s) would be performed."
+}
+else {
+    Write-Host "Done: $installed skill(s) installed."
+}

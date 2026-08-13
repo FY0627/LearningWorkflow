@@ -1,82 +1,128 @@
-# Frank Agentic 开发工作流架构图 (中英双语)
+# Agentic Software Engineering Workflow
 
-这是根据 Nongfsq 的企业级工作流复刻并完善的 1:1 像素级 25 节点 Mermaid 流程图。
+A 26-node workflow for agent-driven software delivery: intake and routing, evidence
+gathering, human authorization, parallel implementation, verification, CI gating,
+security audit, and closeout.
+
+Twenty-four of the nodes are backed by a skill in [`../skills/`](../skills/). The two
+remaining nodes (`START`, `DECISION`) are control-flow only and carry no skill.
+
+Every skill-bearing node label ends with its skill slug in parentheses. This is a
+machine contract, not a convention: [`../scripts/validate-pack.py`](../scripts/validate-pack.py)
+parses these slugs and asserts they match `skill-pack.json` and the `skills/` directory
+exactly. Renaming a node without renaming its skill fails CI.
+
+Provenance of each node — replicated from the source workflow, inferred, or original —
+is recorded in [`workflow-fidelity.md`](workflow-fidelity.md). Chinese mirror:
+[`workflow.zh-CN.md`](workflow.zh-CN.md).
 
 ```mermaid
 flowchart TD
     %% ==========================================
-    %% 1. 入口与分流层
+    %% 1. Intake and routing
     %% ==========================================
-    START["需求 / 想法 / 现有项目<br/>(Request, idea, or existing project)"] --> DECISION{"此工作需要什么？<br/>(What does this work need?)"}
+    START["Request, idea, or existing project"] --> DECISION{"What does this work need?"}
 
-    DECISION --> CLARIFY["澄清意图<br/>(clarify-intent)"]
-    DECISION --> FIX["修复问题<br/>(fix-issue)"]
-    DECISION --> RESEARCH["源码调研<br/>(reportSource)"]
-    DECISION --> READY["功能就绪<br/>(feature-ready)"]
+    DECISION --> CLARIFY["Clarify Intent<br/>(clarify-intent)"]
+    DECISION --> FIX["Fix Issue<br/>(fix-issue)"]
+    DECISION --> RESEARCH["Source Investigation<br/>(report-source)"]
+    DECISION --> READY["Feature Ready<br/>(feature-ready)"]
 
     %% ==========================================
-    %% 2. 证据收集与规划层
+    %% 2. Evidence gathering and planning
     %% ==========================================
-    CLARIFY --> SPEC["需求规约书<br/>(requirements-spec)"]
-    CLARIFY --> RCA["根因分析报告<br/>(root-cause-analysis)"]
-    
-    FIX -->|排查凭据 evidence| SPEC
-    FIX -->|排查凭据 evidence| RCA
-    
-    RESEARCH -->|排查凭据 evidence| RCA
-    RESEARCH -->|排查凭据 evidence| AUDIT_SUM["代码库审计摘要<br/>(codebase-audit-summary)"]
+    CLARIFY --> SPEC["Requirements Spec<br/>(requirements-spec)"]
+    CLARIFY --> RCA["Root Cause Analysis<br/>(root-cause-analysis)"]
 
-    SPEC --> PLAN["生成实施计划<br/>(implementation-plan)"]
+    FIX -->|evidence| SPEC
+    FIX -->|evidence| RCA
+
+    RESEARCH -->|evidence| RCA
+    RESEARCH -->|evidence| AUDIT["Codebase Audit Summary<br/>(codebase-audit-summary)"]
+
+    SPEC --> PLAN["Implementation Plan<br/>(implementation-plan)"]
     RCA --> PLAN
-    AUDIT_SUM --> PLAN
+    AUDIT --> PLAN
     READY --> PLAN
 
-    %% 🔴 填补“人工审批”
-    PLAN --> APPROVAL["人工评审与授权<br/>Human Review & Approval (补充)"]
-    APPROVAL --> IMPL["代码实施<br/>(implementation)"]
+    PLAN --> APPROVAL["Human Review & Approval<br/>(human-approval)"]
+    APPROVAL --> IMPL["Implementation<br/>(implementation)"]
 
     %% ==========================================
-    %% 3. 代码实施与并行处理层
+    %% 3. Implementation and parallel execution
+    %% Braided structure: fan out, sync, fan out, sync.
     %% ==========================================
-    %% 左侧并行处理流
-    IMPL -->|可并行任务 parallelizable work| SUBAGENTS["子 Agent 任务总览<br/>(subagentsOverview)"]
-    
-    %% 🔴 填补“本地沙盒测试”
-    IMPL --> SANDBOX["本地沙盒测试验证<br/>Local Sandbox Testing (补充)"]
+    IMPL -->|parallelizable work| SUBAGENTS["Subagents Overview<br/>(subagents-overview)"]
+    IMPL --> SANDBOX["Local Sandbox Testing<br/>(sandbox-test)"]
 
-    %% 🔴 填补“后端子 Agent”
-    SUBAGENTS --> API_AGENTS["后端与 API 子 Agent<br/>API & Backend Subagents (补充)"]
-    API_AGENTS --> FRONTEND["前端视图组件<br/>(frontend-components)"]
+    %% First sync point: the shared API/backend foundation both tracks depend on.
+    SUBAGENTS --> API["API & Backend Subagents<br/>(api-backend-agents)"]
+    SANDBOX --> API
 
-    %% 🔴 填补“代码集成”
-    SANDBOX --> CONSOLIDATION["代码重构与汇总<br/>Code Consolidation (补充)"]
+    %% Second fan-out: UI work and code consolidation proceed in parallel.
+    API --> FRONTEND["Frontend Components<br/>(frontend-components)"]
+    API --> CONSOLIDATION["Code Consolidation<br/>(code-consolidation)"]
 
-    %% 🔴 填补“视觉与 E2E 验收”
-    FRONTEND --> INTEGRATION["视觉与端到端集成验证<br/>Visual & E2E Verification (补充)"]
-    CONSOLIDATION --> INTEGRATION
+    %% Second sync point: visual acceptance, then end-to-end acceptance.
+    FRONTEND --> VISUAL["Visual Verification<br/>(visual-e2e-verify)"]
+    CONSOLIDATION --> VISUAL
+    VISUAL --> E2E["End-to-End Verification<br/>(e2e-verify)"]
 
-    %% 回退机制与流入 CI
-    INTEGRATION -->|低级或代码错误 low or code failure| IMPL
-    INTEGRATION --> CI["GitHub Actions CI 流水线<br/>(github-actions-ci)"]
+    E2E --> CI["GitHub Actions CI<br/>(github-actions-ci)"]
+
+    %% Two distinct failure classes, two distinct return paths.
+    E2E -->|verification failure| IMPL
+    CI -->|required checks fail| IMPL
 
     %% ==========================================
-    %% 4. CI 门禁与结项归档层
+    %% 4. Release gating and closeout
+    %% CI success forks into two independent tracks:
+    %% the release track and the governance track.
     %% ==========================================
-    %% 🔴 填补“生产发布门禁”
-    CI -->|必要检查通过 required checks pass| DEPLOY["生产环境发布门禁<br/>Production Deployment Gate (补充)"]
-    
-    %% 🔴 填补“遥测与全局记忆沉淀”
-    DEPLOY --> TELEMETRY["性能遥测与全局记忆沉淀<br/>Telemetry & Global Memory (补充)"]
-    DEPLOY --> SEC_AUDIT["代码安全审计<br/>(security-audit)"]
+    CI -->|required checks pass| DEPLOY["Production Deployment Gate<br/>(production-deployment-gate)"]
+    CI -->|required checks pass| SEC["Security Audit<br/>(security-audit)"]
 
-    SEC_AUDIT --> AGENTS_MD["更新规范准则<br/>(agents-md)"]
-    SEC_AUDIT --> ORG_DOCS["整理归档文档<br/>(organize-docs)"]
+    DEPLOY --> TELEMETRY["Telemetry & Global Memory<br/>(telemetry-global-memory)"]
 
-    %% 三条线全部汇入最后的结项节点
-    TELEMETRY --> CLOSEOUT["项目结项闭环<br/>(project-closeout)"]
+    SEC --> AGENTS_MD["Update Conventions<br/>(agents-md)"]
+    SEC --> ORG_DOCS["Organize Documentation<br/>(organize-docs)"]
+
+    TELEMETRY --> CLOSEOUT["Project Closeout<br/>(project-closeout)"]
     AGENTS_MD --> CLOSEOUT
     ORG_DOCS --> CLOSEOUT
 
-    %% 右侧的超长虚线回流到最顶部
-    CLOSEOUT -.->|返回重新迭代 return to request| START
+    CLOSEOUT -.->|return to request| START
 ```
+
+## Layers
+
+| Layer | Purpose | Nodes |
+|---|---|---|
+| 1. Intake and routing | Classify the request before spending any effort on it | `START`, `DECISION`, `clarify-intent`, `fix-issue`, `report-source`, `feature-ready` |
+| 2. Evidence and planning | Produce evidence artifacts, then a plan, then obtain human authorization | `requirements-spec`, `root-cause-analysis`, `codebase-audit-summary`, `implementation-plan`, `human-approval` |
+| 3. Implementation and verification | Braided parallel execution with two sync points, then acceptance | `implementation`, `subagents-overview`, `sandbox-test`, `api-backend-agents`, `frontend-components`, `code-consolidation`, `visual-e2e-verify`, `e2e-verify` |
+| 4. Gating and closeout | CI gate, then parallel release and governance tracks converging on closeout | `github-actions-ci`, `production-deployment-gate`, `telemetry-global-memory`, `security-audit`, `agents-md`, `organize-docs`, `project-closeout` |
+
+## Design notes
+
+**Human authorization is a hard gate, not a suggestion.** `implementation-plan` cannot
+reach `implementation` without passing through `human-approval`. The operator sets goals,
+approves architecture, and accepts risk; the agent matrix executes and self-corrects.
+
+**The parallel section is braided, not two straight rails.** Fan out to
+`subagents-overview` and `sandbox-test`, sync at `api-backend-agents`, fan out again to
+`frontend-components` and `code-consolidation`, sync at `visual-e2e-verify`. The mid-point
+sync exists because both tracks depend on a stable API surface; letting them run to
+completion independently produces two implementations that do not compose.
+
+**Verification failure and CI failure are different failures.** `e2e-verify` failing means
+the behaviour is wrong. `github-actions-ci` failing means the repository is wrong — lint,
+types, tests, build. They return to `implementation` on separate edges because the
+diagnosis differs.
+
+**CI success forks, it does not chain.** `production-deployment-gate` and `security-audit`
+are siblings. Chaining them so the audit runs after the deployment gate would mean auditing
+what has already shipped.
+
+**The loop closes.** `project-closeout` returns to `START`, because the output of one cycle
+is the input to the next.

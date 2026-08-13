@@ -1,34 +1,197 @@
 {
-  "name": "frank-agentic-skills",
-  "version": "1.0.0",
-  "description": "Frank Enterprise Agentic Workflow 1:1 Node Skill Package for Antigravity AI",
-  "author": "Frank & Antigravity AI",
-  "repository": "https://github.com/Frank/frank-agentic-skills",
+  "name": "learning-workflow",
+  "version": "0.1.0",
+  "description": "A 26-node agentic software engineering workflow packaged as portable agent skills: intake routing, evidence gathering, human authorization, braided parallel implementation, verification, CI gating, security audit, and closeout.",
+  "author": "FY0627",
+  "repository": "https://github.com/FY0627/LearningWorkflow",
   "license": "MIT",
+  "workflow": "docs/workflow.md",
+  "maturity_floor": {
+    "beta": 0,
+    "stable": 0
+  },
+  "privacy": {
+    "default_mode": "template-only",
+    "local_audit_requires_explicit_user_request": true,
+    "do_not_record": [
+      "absolute user profile paths",
+      "operating system usernames",
+      "email addresses",
+      "machine or host names",
+      "credentials, tokens, and API keys",
+      "private repository contents"
+    ]
+  },
   "skills": [
-    "clarify-intent",
-    "fix-issue",
-    "report-source",
-    "feature-ready",
-    "requirements-spec",
-    "root-cause-analysis",
-    "codebase-audit-summary",
-    "implementation-plan",
-    "human-approval",
-    "implementation",
-    "subagents-overview",
-    "sandbox-test",
-    "api-backend-agents",
-    "frontend-components",
-    "code-consolidation",
-    "visual-e2e-verify",
-    "e2e-verify",
-    "github-actions-ci",
-    "production-deployment-gate",
-    "telemetry-global-memory",
-    "security-audit",
-    "agents-md",
-    "organize-docs",
-    "project-closeout"
+    {
+      "name": "clarify-intent",
+      "path": "skills/clarify-intent",
+      "status": "draft",
+      "description": "Turn a vague request into a bounded, structured intent before any planning happens."
+    },
+    {
+      "name": "fix-issue",
+      "path": "skills/fix-issue",
+      "status": "draft",
+      "description": "Route a defect report into the evidence layer instead of patching it on sight."
+    },
+    {
+      "name": "report-source",
+      "path": "skills/report-source",
+      "status": "draft",
+      "description": "Investigate existing source and produce evidence for downstream planning."
+    },
+    {
+      "name": "feature-ready",
+      "path": "skills/feature-ready",
+      "status": "draft",
+      "description": "Accept work that already has a settled specification and route it straight to planning."
+    },
+    {
+      "name": "requirements-spec",
+      "path": "skills/requirements-spec",
+      "status": "draft",
+      "description": "Produce a requirements specification artifact as planning evidence."
+    },
+    {
+      "name": "root-cause-analysis",
+      "path": "skills/root-cause-analysis",
+      "status": "draft",
+      "description": "Produce a root cause analysis artifact as planning evidence."
+    },
+    {
+      "name": "codebase-audit-summary",
+      "path": "skills/codebase-audit-summary",
+      "status": "draft",
+      "description": "Produce a structured audit of the existing codebase as planning evidence."
+    },
+    {
+      "name": "implementation-plan",
+      "path": "skills/implementation-plan",
+      "status": "draft",
+      "description": "Convert evidence artifacts into a reviewable implementation plan."
+    },
+    {
+      "name": "human-approval",
+      "path": "skills/human-approval",
+      "status": "draft",
+      "description": "Hard gate: the operator reviews the plan, accepts the risk, and authorizes implementation."
+    },
+    {
+      "name": "implementation",
+      "path": "skills/implementation",
+      "status": "draft",
+      "description": "Execute the authorized plan and dispatch parallelizable work."
+    },
+    {
+      "name": "subagents-overview",
+      "path": "skills/subagents-overview",
+      "status": "draft",
+      "description": "Decompose work into independent subagent tasks with explicit interface contracts."
+    },
+    {
+      "name": "sandbox-test",
+      "path": "skills/sandbox-test",
+      "status": "draft",
+      "description": "Validate changes in a local sandbox before they reach shared branches."
+    },
+    {
+      "name": "api-backend-agents",
+      "path": "skills/api-backend-agents",
+      "status": "draft",
+      "description": "Stabilize the shared API and backend surface that parallel tracks depend on."
+    },
+    {
+      "name": "frontend-components",
+      "path": "skills/frontend-components",
+      "status": "draft",
+      "description": "Build view-layer components against the settled API surface and the project design tokens."
+    },
+    {
+      "name": "code-consolidation",
+      "path": "skills/code-consolidation",
+      "status": "draft",
+      "description": "Refactor and merge parallel output into one coherent implementation."
+    },
+    {
+      "name": "visual-e2e-verify",
+      "path": "skills/visual-e2e-verify",
+      "status": "draft",
+      "description": "Visual acceptance: confirm the rendered result matches the intended design."
+    },
+    {
+      "name": "e2e-verify",
+      "path": "skills/e2e-verify",
+      "status": "draft",
+      "description": "End-to-end acceptance: confirm the behaviour works across the full path."
+    },
+    {
+      "name": "github-actions-ci",
+      "path": "skills/github-actions-ci",
+      "status": "draft",
+      "description": "Run and interpret the repository CI gate: lint, types, tests, build."
+    },
+    {
+      "name": "production-deployment-gate",
+      "path": "skills/production-deployment-gate",
+      "status": "draft",
+      "description": "Release gate: decide whether verified changes may reach production."
+    },
+    {
+      "name": "telemetry-global-memory",
+      "path": "skills/telemetry-global-memory",
+      "status": "draft",
+      "description": "Capture post-release telemetry and durable lessons for the next cycle."
+    },
+    {
+      "name": "security-audit",
+      "path": "skills/security-audit",
+      "status": "draft",
+      "description": "Audit changes for security defects in parallel with the release gate."
+    },
+    {
+      "name": "agents-md",
+      "path": "skills/agents-md",
+      "status": "draft",
+      "description": "Update the project AGENTS.md conventions with what this cycle taught."
+    },
+    {
+      "name": "organize-docs",
+      "path": "skills/organize-docs",
+      "status": "draft",
+      "description": "Organize and archive project documentation before closeout."
+    },
+    {
+      "name": "project-closeout",
+      "path": "skills/project-closeout",
+      "status": "draft",
+      "description": "Close the loop: summarize outcomes and feed them back as the next cycle's input."
+    }
+  ],
+  "docs": [
+    {
+      "path": "docs/workflow.md",
+      "description": "The 26-node workflow graph and its design rationale."
+    },
+    {
+      "path": "docs/workflow-fidelity.md",
+      "description": "Node-by-node provenance: what is replicated, inferred, or original."
+    },
+    {
+      "path": "docs/skill-authoring-standard.md",
+      "description": "The maturity tiers and the rules the validator enforces at each tier."
+    },
+    {
+      "path": "docs/compatibility.md",
+      "description": "Cross-agent portability contract and degradation path."
+    },
+    {
+      "path": "docs/trigger-tuning.md",
+      "description": "How to write a description that triggers when it should and stays quiet otherwise."
+    },
+    {
+      "path": "docs/release-checklist.md",
+      "description": "Pre-release gates, mirroring the validator checks."
+    }
   ]
 }
