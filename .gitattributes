@@ -1,0 +1,18 @@
+# Normalize line endings on commit; check out platform-native where specified.
+* text=auto eol=lf
+
+# PowerShell must keep CRLF or Windows PowerShell can mis-parse here-strings.
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+*.psd1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binary assets: never touch.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
