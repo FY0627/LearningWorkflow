@@ -1,0 +1,90 @@
+# Irreversibility Tiers
+
+Loaded by `human-approval` at Workflow step 2, before classifying any pending action.
+
+## Purpose
+
+Decide which tier a pending action falls into, **by matching, not by judgement**. The gate
+skill is forbidden from assessing importance; this file is where that assessment is replaced
+by something checkable.
+
+## The two questions
+
+Ask them in this order. The order is not by severity — question 2 has no meaning until
+question 1 is answered, because there is nothing to weigh the cost of undoing until an undo
+exists at all.
+
+**Q1 — Can the operator undo it themselves?**
+
+- Is there a command that reverses it, and can that command be written down *before* acting?
+- A credential that does not exist yet but can be created first — a backup, a branch, a tag —
+  counts only once it actually exists. Classify the action as it stands right now.
+- **Check before concluding, in either direction.** "It's source code, so it's probably in
+  git" is an assumption, and so is treating a credential as absent without looking. Where the
+  environment allows it, look: is there a `.git`, is the worktree clean, does a backup already
+  exist. Only when the check is impossible, or comes back negative, is the credential absent.
+- **A universal fallback is not a substitute for checking.** Proposing a `.bak` copy beside
+  every file works in every environment, which is exactly why it is tempting — and why it
+  hides the question instead of answering it. Its cost lands on the operator, who ends up with
+  a directory full of `.bak` files. Where a check would reveal a cleaner credential — a commit,
+  a branch — do the check and offer that one.
+- Where the credential can be created, creating it first becomes an option on the panel. That
+  costs the operator one keystroke, and costs nothing at all if the credential turns out to
+  have been there.
+- "Themselves" is the operative word. If undoing depends on a party the operator does not
+  control — a vendor refunding a charge, a recipient deleting a message — the answer is **no**.
+
+**Q2 — Does undoing take other things with it?**
+
+- Would the undo also discard work that should have been kept: later commits, someone else's
+  changes, downstream state built on top of it?
+- This asks about collateral damage from the undo itself. It does **not** ask whether some
+  policy forbids undoing. A rule against reverting is not a property of the action.
+
+**Does not count as "other things":**
+
+| Answer | Why it does not count |
+|---|---|
+| "The undo removes what this action produced" | That is what an undo is. Counting it would leave Tier 0 permanently empty. |
+| "A rule says I am not allowed to revert" | A policy is not a property of the action. |
+
+If either question cannot be answered, the action is Tier 2. Fail closed.
+
+## Tiers
+
+| Tier | Q1 undoable by self | Q2 takes other things | Meaning |
+|:--:|:--:|:--:|---|
+| **0** | yes | no | Undo is clean. No gate. |
+| **1** | yes | yes | Undo exists but costs work that was worth keeping. |
+| **2** | no | — | Cannot be undone. |
+
+## Worked examples
+
+| Action | Q1 | Q2 | Tier |
+|---|:--:|:--:|:--:|
+| Edit a file in a clean git worktree | yes | no | 0 |
+| Change one number in `skill-pack.json` | yes | no | 0 |
+| Swap a demo's fake data for real API calls, nothing built on top yet | yes | no | 0 |
+| `git push --force` to a shared branch | yes | yes — discards others' commits | 1 |
+| Revert a TTS approach after unrelated work landed on the same branch | yes | yes — discards the UI, parameter and ASR work | 1 |
+| Delete a large directory with no backup | no | — | 2 |
+| Send an email to a customer | no — needs the recipient | — | 2 |
+| Call a metered API | no — needs the vendor | — | 2 |
+
+## Notes
+
+- Classification is evaluated **at the moment of the check**, not in the abstract. Deleting a
+  directory is Tier 2 without a backup and Tier 0 after one is made. Reversibility can be
+  manufactured; the gate's job is to report which one is true right now.
+- This file deliberately does not enumerate actions. An action list would always be
+  incomplete, and combined with fail-closed an incomplete list turns every unlisted action
+  into a gate — which gets the gate switched off within days.
+
+## Acceptance criteria
+
+- Every tier has at least one real, non-hypothetical example. **Met.**
+- An unrehearsed action can be classified without the reader stalling or answering the wrong
+  question. **Patched, unverified** — Q2 was misread once; the exclusion table above was added
+  in response, and has not yet been tested against a fresh action.
+- Two different people applying this file to the same action reach the same tier.
+- No step requires the reader to decide whether something is "important" or "risky".
