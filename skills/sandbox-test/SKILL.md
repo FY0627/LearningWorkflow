@@ -6,7 +6,7 @@ description: >-
 
 # 本地沙盒测试验证 (Sandbox Test)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **3. 代码实施层 -> 本地沙盒测试验证 (Local Sandbox Testing)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **3. 代码实施层 -> 本地沙盒测试验证 (Local Sandbox Testing)** 节点。
 
 ## 目标 (Goal)
 运行测试命令（如 `npm test`, `pytest`），捕获任何断言失败并确保 100% 通过。

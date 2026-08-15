@@ -7,7 +7,7 @@ description: >-
 
 # 澄清意图 (Clarify Intent)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 流程图中的 **入口分流层 -> 澄清意图 (clarify-intent)** 节点。
+本 Skill 对应 `docs/workflow.md` 流程图中的 **入口分流层 -> 澄清意图 (clarify-intent)** 节点。
 
 ## 目标 (Goal)
 将用户的模糊需求/原始想法转化为清晰、明确、结构化的需求范围说明，为后续生成 `requirements-spec`（需求规约书）提供凭据。

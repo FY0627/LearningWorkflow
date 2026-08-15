@@ -6,4 +6,4 @@ description: >-
 
 # 后端与 API 子 Agent (API & Backend Subagents)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **3. 代码实施层 -> 后端与 API 子 Agent (API & Backend Subagents)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **3. 代码实施层 -> 后端与 API 子 Agent (API & Backend Subagents)** 节点。

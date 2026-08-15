@@ -6,7 +6,7 @@ description: >-
 
 # 实施计划生成 (Implementation Plan)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **2. 证据收集与规划层 -> 生成实施计划 (implementation-plan)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **2. 证据收集与规划层 -> 生成实施计划 (implementation-plan)** 节点。
 
 ## 目标 (Goal)
 生成标准 `implementation_plan.md` 产物，包含需求概要、待修改/新建的文件列表、组件关系及自动化/手动验证计划。

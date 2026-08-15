@@ -6,7 +6,7 @@ description: >-
 
 # 修复问题 (Fix Issue)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **1. 入口与分流层 -> 修复问题 (fix-issue)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **1. 入口与分流层 -> 修复问题 (fix-issue)** 节点。
 
 ## 目标 (Goal)
 重现问题现象，收集完整的错误日志/凭据 (Evidence)，并输出供后续分析的诊断结论。

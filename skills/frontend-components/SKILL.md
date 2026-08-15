@@ -7,7 +7,7 @@ description: >-
 
 # 前端视图组件开发 (Frontend Components)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **3. 代码实施层 -> 前端视图组件 (frontend-components)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **3. 代码实施层 -> 前端视图组件 (frontend-components)** 节点。
 
 ## 目标 (Goal)
 交付符合高端视觉美学 (Premium Aesthetic)、具备流体响应式 (Fluid Responsive) 且代码干净无臃肿的前端组件。

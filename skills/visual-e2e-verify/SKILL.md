@@ -6,7 +6,7 @@ description: >-
 
 # 视觉与端到端验证 (Visual & E2E Verification)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 流程图中的 **3. 代码实施层 -> 视觉与端到端集成验证 (Visual & E2E Verification)** 节点。
+本 Skill 对应 `docs/workflow.md` 流程图中的 **3. 代码实施层 -> 视觉与端到端集成验证 (Visual & E2E Verification)** 节点。
 
 ## 目标 (Goal)
 确保交付的前端 UI 页面无样式错位、无文字溢出、无响应式断裂，且微交互符合预期。

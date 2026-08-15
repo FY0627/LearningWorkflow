@@ -6,4 +6,4 @@ description: >-
 
 # 性能遥测与全局记忆沉淀 (Telemetry & Global Memory)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **4. 门禁与结项归档层 -> 性能遥测与全局记忆沉淀 (Telemetry & Global Memory)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **4. 门禁与结项归档层 -> 性能遥测与全局记忆沉淀 (Telemetry & Global Memory)** 节点。

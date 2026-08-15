@@ -6,7 +6,7 @@ description: >-
 
 # 项目结项闭环 (Project Closeout)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **4. 门禁与结项归档层 -> 项目结项闭环 (project-closeout)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **4. 门禁与结项归档层 -> 项目结项闭环 (project-closeout)** 节点。
 
 ## 目标 (Goal)
 生成最终的 `walkthrough.md` 交付报告，列出所做的修改、验证截图或日志，完成终结闭环。

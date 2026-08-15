@@ -6,7 +6,7 @@ description: >-
 
 # 需求规约书生成 (Requirements Spec)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **2. 证据收集与规划层 -> 需求规约书 (requirements-spec)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **2. 证据收集与规划层 -> 需求规约书 (requirements-spec)** 节点。
 
 ## 目标 (Goal)
 生成一份无歧义、包含输入输出定义与功能边界的 Markdown 格式 PRD 规约文档。

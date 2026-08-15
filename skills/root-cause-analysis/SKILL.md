@@ -6,7 +6,7 @@ description: >-
 
 # 根因分析报告 (Root Cause Analysis)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **2. 证据收集与规划层 -> 根因分析报告 (root-cause-analysis)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **2. 证据收集与规划层 -> 根因分析报告 (root-cause-analysis)** 节点。
 
 ## 目标 (Goal)
 使用 5-Why 分析法追溯问题根本原因，避免治标不治本的表面修补。

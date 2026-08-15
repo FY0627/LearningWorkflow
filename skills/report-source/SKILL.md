@@ -6,4 +6,4 @@ description: >-
 
 # 源码调研 (reportSource)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **1. 入口与分流层 -> 源码调研 (reportSource)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **1. 入口与分流层 -> 源码调研 (reportSource)** 节点。

@@ -6,4 +6,4 @@ description: >-
 
 # 整理归档文档 (organize-docs)
 
-本 Skill 对应 `Frank_Agentic_Workflow.md` 中的 **4. 门禁与结项归档层 -> 整理归档文档 (organize-docs)** 节点。
+本 Skill 对应 `docs/workflow.md` 中的 **4. 门禁与结项归档层 -> 整理归档文档 (organize-docs)** 节点。
