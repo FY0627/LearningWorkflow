@@ -22,7 +22,13 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
 2. Classify the pending action by reversibility. **Lookup only** — load
    `references/irreversibility-tiers.md` and match. Do not reason about importance.
 3. If the action does not appear in the table, classify it as irreversible. Fail closed.
-4. Tier 0 (fully reversible) requires no gate. Proceed and say nothing.
+4. Tier 0 (fully reversible) requires no gate. Do the work without interrupting, then close
+   with a single line carrying two things: the fact the check established, and the undo command
+   that fact makes available — e.g. *"tracked, worktree clean; `git checkout -- skills/`
+   reverts this."* After the work, never as a question. Neither half can be written without
+   having actually checked, which is what keeps a silent pass distinguishable from a skill that
+   never loaded. A bare "I applied human-approval" is a claim, not evidence, and does not
+   satisfy this.
 5. Otherwise render the approval panel per **Output Contract**.
 6. Accept only consent that satisfies **Consent**. Anything else is not consent: state what is
    still needed, once, and stop. Do not argue, do not re-explain the plan.
