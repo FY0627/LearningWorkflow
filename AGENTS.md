@@ -16,6 +16,13 @@ CI runs, and it is the fastest way to find out you broke something.
   `skills/<name>/references/*.md` — one level deep, never nested.
 - Every reference file must be linked from its `SKILL.md`, together with the condition
   under which it should be loaded. Orphan reference files are an error at `stable`.
+- **Never ship a single filled-in example.** Worked examples are copied verbatim, and they beat
+  the prose rules written around them. Forward tests against `human-approval` caught this three
+  times: a placeholder inside angle brackets, an identifier ordering, and the example's own
+  language — that last one in a file that explicitly said to render in the operator's language.
+  Give at least two examples that hold the structure constant and differ in exactly the things
+  that are allowed to differ. The difference between them is what tells a reader which details
+  are requirements and which are incidental.
 - Do not raise a skill's `status` in `skill-pack.json` without meeting that tier's rules in
   [`docs/skill-authoring-standard.md`](docs/skill-authoring-standard.md). Satisfying the
   string checks is not the same as meeting the intent.

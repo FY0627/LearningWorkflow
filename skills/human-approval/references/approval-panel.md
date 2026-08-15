@@ -78,7 +78,12 @@ Dropping an option or an irreversible consequence to satisfy the ceiling is neve
 A panel that hides an option is worse than no panel, because the operator believes they saw
 everything.
 
-## Worked example
+## Worked examples
+
+Two, deliberately. A single filled-in example cannot tell a reader which of its details are
+required and which are incidental, and it gets copied whole — language, option count and all.
+These two hold the structure constant and vary everything else, so the difference between them
+is the answer to "what am I allowed to change".
 
 Deleting a TTS dataset that has no backup, raised mid-task:
 
@@ -94,6 +99,27 @@ Undo:         A none; B mv data/tts_dataset_old data/tts_dataset; C n/a
 ```
 
 ≈ 60 words.
+
+Sending a statement to a customer — different language, two options rather than three, and no
+credential that can be created first, so there is no "back it up and then proceed" middle
+option to offer:
+
+```
+已暂停:即将向客户发送对账邮件。
+
+  A. 发送
+  B. 不发送
+
+后果:A 对方立即看到,无法撤回 / B 保持未发送
+撤销:A 无;B 不适用
+```
+
+≈ 40 characters.
+
+What is constant across both: the stop line, identifiers on options only, a "do not proceed"
+option, consequences as facts, an undo line in the same identifier order. What varies: the
+language, the number of options, whether a credential can be created first. Nothing else in
+either example is a requirement.
 
 ## Acceptance criteria
 

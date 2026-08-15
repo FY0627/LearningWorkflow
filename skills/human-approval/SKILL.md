@@ -25,7 +25,8 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
 4. Tier 0 (fully reversible) requires no gate. Do the work without interrupting, then close
    with a single line carrying two things: the fact the check established, and the undo command
    that fact makes available — e.g. *"tracked, worktree clean; `git checkout -- skills/`
-   reverts this."* After the work, never as a question. Neither half can be written without
+   reverts this"*, phrased in the operator's language, not this file's. After the work, never
+   as a question. Neither half can be written without
    having actually checked, which is what keeps a silent pass distinguishable from a skill that
    never loaded. A bare "I applied human-approval" is a claim, not evidence, and does not
    satisfy this.
