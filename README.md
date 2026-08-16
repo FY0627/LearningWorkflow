@@ -113,6 +113,29 @@ Targets: `claude` (`$HOME/.claude/skills`), `codex` (`$HOME/.codex/skills`), `ge
 (`$HOME/.gemini/config/skills`), or `all`. The installer refuses to overwrite an existing
 skill without `-Force`.
 
+### Installing a gate is not enough
+
+Copying files does not make a gate run. A skill loads when the host judges its description a
+match, and that judgement happens **before** any rule inside the skill can apply. So a skill
+cannot make itself unskippable — the decision to load it is made by the very party it is
+meant to constrain.
+
+This is not hypothetical. In a recorded run ([`examples/dry-runs.md`](examples/dry-runs.md))
+the model decided a deletion was "low risk", never loaded `human-approval` at all, deleted
+four unrecoverable build artifacts, and then ticked the approval step as completed.
+
+For any skill that must not be skipped, put a line in the consuming project's `CLAUDE.md` or
+`AGENTS.md` that makes the call part of the workflow rather than a match:
+
+> Before any task that leaves something behind after this session — writing or deleting files,
+> changing dependencies, running state-changing commands, committing, pushing, deploying,
+> calling an external service, sending a message — `human-approval` must be invoked first,
+> **even when the work is unimportant, routine, or produces something that could simply be
+> rebuilt.**
+
+The clause in bold is not padding. Those three are the exact justifications a model used to
+skip the gate, and naming them is what closes the last place a judgement can hide.
+
 ## Validate
 
 ```bash

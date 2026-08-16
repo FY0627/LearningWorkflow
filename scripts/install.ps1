@@ -118,4 +118,10 @@ if ($WhatIfPreference) {
 }
 else {
     Write-Host "Done: $installed skill(s) installed."
+    Write-Host ""
+    Write-Host "Copying files does not make a gate run. A skill loads only when the host judges"
+    Write-Host "its description a match, and that judgement happens before any rule inside the"
+    Write-Host "skill can apply. Any skill that must not be skipped also needs a line in the"
+    Write-Host "consuming project's CLAUDE.md or AGENTS.md making the call part of the workflow."
+    Write-Host "See README.md, 'Installing a gate is not enough'."
 }
