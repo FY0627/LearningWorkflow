@@ -30,10 +30,12 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
    having actually checked, which is what keeps a silent pass distinguishable from a skill that
    never loaded. A bare "I applied human-approval" is a claim, not evidence, and does not
    satisfy this.
-5. Otherwise render the approval panel per **Output Contract**.
+5. Otherwise load `references/approval-panel.md` — now, not earlier — and render the panel per
+   **Output Contract**.
 6. Accept only consent that satisfies **Consent**. Anything else is not consent: state what is
    still needed, once, and stop. Do not argue, do not re-explain the plan.
-7. Record the granted scope: which options, which accepted risks, which action tiers.
+7. Load `references/authorization-record.md` and record the granted scope: which options, which
+   accepted risks, which action tiers.
 8. During execution, watch the **Expiry** conditions. On any of them, stop and return here.
 
 ## Refusals
@@ -132,6 +134,11 @@ carrying an identifier, the irreversible part, the accepted risk, and the undo c
 explanation lives in the plan, not here.
 
 ## References
+
+This is a list of what exists, not a reading list. Load each one at the step that names it and
+not before — most runs need only the first. Reading all three up front spends context on every
+run, including the runs that never open a panel, which is the cost this layering exists to
+avoid.
 
 - `references/irreversibility-tiers.md`: the reversibility criteria. Load before classifying
   any pending action, and treat any action it does not resolve as irreversible.
