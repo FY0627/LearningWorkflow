@@ -34,17 +34,39 @@ one line and the next is spending the budget on navigation.
   quota.
 - **Render everything in the operator's language, labels included.** A Chinese panel with
   `Consequence:` / `Undo:` headings is half-translated.
+- **The stop line names what is actually about to be touched, compared against what was
+  asked.** If they differ — wider, narrower, or a different object — say so in a few words:
+  *"你要求删 apk，实际要删的是整个 build 目录"*. This is a comparison, not a verdict; the panel
+  has no standing to decide whether widening was justified. It exists so the operator is never
+  asked to authorise one thing while believing they authorised another. When the two match,
+  write nothing extra — the cost is zero on the normal path.
 - **Only options carry identifiers.** Consequences and undo lines are read, never quoted back,
   so labelling them adds noise and costs words. The rule: *label only what the operator will
   say out loud.*
 - **One option is always "do not proceed."** Without it the panel silently assumes the work
   should happen and reduces the operator to choosing how. That assumption is the failure this
   gate exists to stop.
-- **The number of options follows the situation.** Three is what the worked example happens to
-  have, not a format. Two is fine; five means the decision is probably too big.
-- **Undo commands must run as printed.** `Move-Item <backup_path> data/tts_dataset` is not an
-  undo command — a placeholder cannot be pasted. If the path is not decided yet, that is a fact
-  about the option and belongs in its consequence, not hidden inside angle brackets.
+- **The option set is derived, not chosen.** What varies is what each option says; how many
+  there are is a result, not a style decision. Build it in this order:
+  1. The direct action.
+  2. Create the restore credential first, then act. **Anything sitting on disk can be copied
+     aside — one file, a directory, a whole build tree — so for anything on disk this option is
+     always present.** Size is not a reason to drop it, and neither is "not worth copying":
+     whether the copy is worth making is the operator's call, and dropping the option takes
+     that call away from them. It is absent only when nothing at all can be prepared
+     beforehand — a message already sent, a charge already made.
+  3. Do not proceed.
+
+  So **two options is a claim**: it says no credential could be created here. If that claim is
+  true, say it on the panel in three or four words. If it is not true, the panel is missing the
+  one option that changes the outcome. Five options means the decision is too big and belongs
+  upstream, split.
+- **The paste test.** Before printing an undo line, do this to it: select it, paste it into a
+  terminal, press enter. If any part of it would have to be replaced first, it fails. How that
+  part is dressed makes no difference — `<backup_path>`, 备份路径, `your_dir`, a blank space are
+  all the same failure. An undo the operator has to finish writing while something is on fire is
+  not an undo. When a value is not decided yet, decide it in the option itself ("back it up as
+  `config.json.bak` beside it, then delete") so that the undo line completes itself.
 - **Where a restore credential can be created first — a backup, a branch, a tag — that is its
   own option.** It is usually the one the operator wants, and it is invisible unless offered.
 - **Consequences are stated as facts.** No evaluative wording that tilts toward an option
@@ -118,8 +140,12 @@ option to offer:
 
 What is constant across both: the stop line, identifiers on options only, a "do not proceed"
 option, consequences as facts, an undo line in the same identifier order. What varies: the
-language, the number of options, whether a credential can be created first. Nothing else in
-either example is a requirement.
+language, and the wording of each option.
+
+The second example has two options **because** nothing could be copied aside first — an email
+already sent cannot be un-sent by preparing something beforehand. That is a derived result, not
+a shorter format to imitate. Anything sitting on disk can be copied aside, so anything on disk
+gets three.
 
 ## Acceptance criteria
 

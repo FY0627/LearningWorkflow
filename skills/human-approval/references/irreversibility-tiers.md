@@ -33,6 +33,14 @@ exists at all.
   have been there.
 - "Themselves" is the operative word. If undoing depends on a party the operator does not
   control — a vendor refunding a charge, a recipient deleting a message — the answer is **no**.
+- **Regenerating is not undoing.** An undo gives back the artifact that was there. A rebuild
+  gives a new one, produced from whatever the inputs say now, and it will differ — different
+  timestamp, different code state, possibly a different commit. So "it can be rebuilt" is not
+  a yes to this question. Build outputs, installers, bundles, exported files, caches: deleting
+  them is undoable only if a copy of *that* artifact still exists somewhere.
+- **A hedged command is not a command.** If the undo can only be written as "run X, or whatever
+  this project's equivalent is", then it could not be written down before acting, and the
+  answer here is no. Uncertainty about the undo is itself the answer.
 
 **Q2 — Does undoing take other things with it?**
 
@@ -68,6 +76,7 @@ If either question cannot be answered, the action is Tier 2. Fail closed.
 | `git push --force` to a shared branch | yes | yes — discards others' commits | 1 |
 | Revert a TTS approach after unrelated work landed on the same branch | yes | yes — discards the UI, parameter and ASR work | 1 |
 | Delete a large directory with no backup | no | — | 2 |
+| Delete a build output (APK, bundle) with no copy kept | no — a rebuild is a different artifact | — | 2 |
 | Send an email to a customer | no — needs the recipient | — | 2 |
 | Call a metered API | no — needs the vendor | — | 2 |
 
@@ -84,7 +93,8 @@ If either question cannot be answered, the action is Tier 2. Fail closed.
 
 - Every tier has at least one real, non-hypothetical example. **Met.**
 - An unrehearsed action can be classified without the reader stalling or answering the wrong
-  question. **Patched, unverified** — Q2 was misread once; the exclusion table above was added
-  in response, and has not yet been tested against a fresh action.
+  question. **Partially met** — deleting a build output was classified correctly in four
+  consecutive runs after the *Regenerating is not undoing* bullet was added; before it, the same
+  action reached Tier 0. Q2's exclusion table still has no forward test of its own.
 - Two different people applying this file to the same action reach the same tier.
 - No step requires the reader to decide whether something is "important" or "risky".
