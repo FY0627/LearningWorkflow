@@ -80,14 +80,16 @@ one line and the next is spending the budget on navigation.
   all the same failure. An undo the operator has to finish writing while something is on fire is
   not an undo. When a value is not decided yet, decide it in the option itself ("back it up as
   `config.json.bak` beside it, then delete") so that the undo line completes itself.
-- **The undo must move the thing back.** The paste test asks only whether the line runs; it says
-  nothing about what happens when it does. Read the option as the steps it actually performs —
-  *"copy X to Y, then delete X"* — and the undo is those steps reversed: *"put Y back at X"*.
-  The original path is the undo's **destination**, and it has to appear in the command as one.
-  A line that only removes something restores nothing: it is a second deletion wearing the undo
-  label, and it fires at the exact moment the operator is trying to recover, on the only copy
-  they have left. Mechanical check, no judgement needed: **if the path the action removed does
-  not appear in the undo command, the line is not an undo.**
+- **The undo is the option run backwards.** The option's end state is the undo's starting point;
+  the option's starting point is the undo's destination. Write every command in the undo line as
+  if the option had already been carried out — the backup exists, the original is gone — because
+  that is the only moment the line is ever read. Two mechanical checks, no judgement in either:
+  **does each command's source still exist once the option has run**, and **does the option's
+  starting point appear in the undo line as a destination**. A command valid only *before* the
+  option runs — the backup step itself — fails the first and does not belong here; pasted during
+  a recovery it errors on a missing source, at the worst possible moment. A line that only
+  removes something fails the second: it restores nothing, and it lands on the one copy the
+  operator has left.
 - **Where a restore credential can be created first — a backup, a branch, a tag — that is its
   own option.** It is usually the one the operator wants, and it is invisible unless offered.
 - **Consequences are stated as facts.** No evaluative wording that tilts toward an option

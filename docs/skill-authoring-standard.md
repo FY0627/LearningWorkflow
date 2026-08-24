@@ -84,6 +84,43 @@ Three layers, borrowed from the way well-built skill packs are structured:
 
 A rule that belongs in layer 2 but sits in layer 1 costs context on every single run.
 
+## How to write a rule
+
+Sixteen recorded runs against `human-approval` produced one finding that generalises past that
+skill: **how a rule is phrased decides whether it will need patching again.** Three levels.
+
+1. **Name a forbidden form.** *"Never write `<backup_path>` in an undo command."* The next run
+   wrote `备份路径` and sailed through. Naming a form invites a change of form, and the set of
+   forms is open — it cannot be finished.
+2. **Name an action or a test.** *"Select the undo line, paste it into a terminal, press enter.
+   If any part would have to be replaced first, it fails."* Form stops mattering: placeholder,
+   Chinese, a blank space all fail identically. But a test covers only what it tests. This one
+   asks whether the line runs, and later passed a command that ran perfectly and deleted the
+   operator's only backup.
+3. **Define the thing.** *"The undo is the option run backwards."* Everything that is not that is
+   excluded without being listed, including cases the author never imagined.
+
+Write at level 3 wherever the thing can be defined, and ship the definition with a mechanical
+check beside it. A definition alone drifts: *"required whenever a credential can be made"* was
+read as *whenever it is worth making one*, and the rule then passed on a small file and failed on
+a large directory. **The definition sets the direction; the check stops the drift.**
+
+### The rule count is the ceiling, not the token count
+
+Layer 1's cap earns its keep — `SKILL.md` is loaded on every run. Layer 2 is cheaper than it
+looks: a fully gated run of `human-approval` reads roughly 6.7k tokens across four files, about
+3% of a 200k window, and a run that takes no gate never opens the panel file at all.
+
+What is actually scarce is how many rules a model holds at once. One recorded run held 14 of 15
+in a single reference file — and had applied the fifteenth correctly an hour earlier, on the same
+machine, on a near-identical prompt.
+
+So the number to watch is the rule count, and it must not climb once per defect. When a new defect
+appears, first ask whether it is the other half of a rule already present. *The undo's destination
+must be the original path* and *the undo's starting point must be the post-option state* looked
+like two findings; they were one rule seen from two sides, and merging them left the count where
+it started.
+
 ## Section conventions for `beta` and above
 
 ```
