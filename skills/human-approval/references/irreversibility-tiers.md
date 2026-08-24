@@ -1,6 +1,7 @@
 # Irreversibility Tiers
 
-Loaded by `human-approval` at Workflow step 2, before classifying any pending action.
+Loaded by `human-approval` at Workflow step 3, once the task's action list exists. Every action
+on that list is classified separately; the task then takes the highest tier among them.
 
 ## Purpose
 

@@ -19,10 +19,18 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
 
 1. Determine whether an unexpired approval already covers this exact work. If yes, proceed
    without re-asking. If the work has drifted from what was approved, see **Expiry**.
-2. Classify the pending action by reversibility. **Lookup only** — load
+2. List every action this request will take, **before classifying any of them** — including
+   actions you are adding yourself, and actions that exist only to serve the ones asked for.
+   A request is a task; a task is a list. Everything below applies to the list, not to the one
+   action that looks like the point.
+3. Classify each action on the list by reversibility. **Lookup only** — load
    `references/irreversibility-tiers.md` and match. Do not reason about importance.
-3. If the action does not appear in the table, classify it as irreversible. Fail closed.
-4. Tier 0 (fully reversible) requires no gate. Do the work without interrupting, then close
+4. If an action does not appear in the table, classify it as irreversible. Fail closed.
+5. **The task takes the highest tier on its list.** A lower-tier action gets no path of its
+   own — it is carried by the tier above it, and it stays visible there. Alone, a Tier 0 edit
+   closes with its own trace line and the operator sees it; bundled under something bigger it
+   would vanish, leaving the gate protecting it *worse* than no gate at all.
+6. Tier 0 — every action on the list — requires no gate. Do the work without interrupting, then close
    with a single line carrying two things: the fact the check established, and the undo command
    that fact makes available — e.g. *"tracked, worktree clean; `git checkout -- skills/`
    reverts this"*, phrased in the operator's language, not this file's. After the work, never
@@ -30,13 +38,13 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
    having actually checked, which is what keeps a silent pass distinguishable from a skill that
    never loaded. A bare "I applied human-approval" is a claim, not evidence, and does not
    satisfy this.
-5. Otherwise load `references/approval-panel.md` — now, not earlier — and render the panel per
+7. Otherwise load `references/approval-panel.md` — now, not earlier — and render the panel per
    **Output Contract**.
-6. Accept only consent that satisfies **Consent**. Anything else is not consent: state what is
+8. Accept only consent that satisfies **Consent**. Anything else is not consent: state what is
    still needed, once, and stop. Do not argue, do not re-explain the plan.
-7. Load `references/authorization-record.md` and record the granted scope: which options, which
+9. Load `references/authorization-record.md` and record the granted scope: which options, which
    accepted risks, which action tiers.
-8. During execution, watch the **Expiry** conditions. On any of them, stop and return here.
+10. During execution, watch the **Expiry** conditions. On any of them, stop and return here.
 
 ## Refusals
 
@@ -103,7 +111,7 @@ An approval covers the plan that was approved and nothing else. It expires when:
 - The action set changes — anything not present in the approved plan.
 - The reversibility tier of the remaining work rises above the approved tier.
 
-Expired approval returns to step 5. It is not renewed by the agent's own judgement that the
+Expired approval returns to step 7. It is not renewed by the agent's own judgement that the
 change was small.
 
 **Upstream requirement:** `implementation-plan` must (a) list the premises its plan depends on,

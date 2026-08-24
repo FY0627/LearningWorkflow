@@ -136,6 +136,13 @@ For any skill that must not be skipped, put a line in the consuming project's `C
 The clause in bold is not padding. Those three are the exact justifications a model used to
 skip the gate, and naming them is what closes the last place a judgement can hide.
 
+**The pointer has a boundary of its own, and it has been measured.** It does something only in a
+host that loads `CLAUDE.md`. In a later run the same prompt went to a different client: the skill
+was installed, the pointer was in place, and neither appeared anywhere in the run — three tool
+calls, no gate, an entire Android project deleted, of which only the git-tracked half came back.
+Every layer added to guard the one below has an entrance of its own. The chain does not terminate
+in something safe; it terminates in what the operator checks by hand.
+
 ## Validate
 
 ```bash

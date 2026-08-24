@@ -1,6 +1,6 @@
 # Authorization Record Format
 
-Loaded by `human-approval` at Workflow step 7, and again before each action taken in
+Loaded by `human-approval` at Workflow step 9, and again before each action taken in
 unattended mode.
 
 ## Purpose

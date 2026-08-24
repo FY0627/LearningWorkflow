@@ -1,6 +1,6 @@
 # Approval Panel Template
 
-Loaded by `human-approval` at Workflow step 5, when a gate has been triggered and the panel
+Loaded by `human-approval` at Workflow step 7, when a gate has been triggered and the panel
 must be rendered.
 
 ## Purpose
@@ -40,6 +40,19 @@ one line and the next is spending the budget on navigation.
   has no standing to decide whether widening was justified. It exists so the operator is never
   asked to authorise one thing while believing they authorised another. When the two match,
   write nothing extra — the cost is zero on the normal path.
+- **The panel covers the whole action list, not the action that triggered it.** The gate opens
+  because of the highest tier on the list, and then presents all of it. An action that would
+  have been visible on its own — a Tier 0 edit closes with its own trace line, and the operator
+  sees it — must not become invisible by riding along with something bigger. That would leave
+  the gate protecting it worse than no gate at all. **Not on the panel is not authorised.**
+- **Inside the named object, one line carrying its scale; outside it, one line each.** Renaming
+  an API touches forty files, deleting a dataset removes three thousand — those are the object
+  the operator named, so they compress to *"重命名 X → Y，波及 40 个文件"*, with the count kept as
+  a fact so the magnitude stays visible. An action outside that object never compresses, however
+  small: a `.gitignore` edit nobody asked for gets its own line beside a 40GB deletion. **The
+  test is not size. It is whether the action exists only because the named thing is being acted
+  on, or is a second decision made here.** Fold the second kind in and consent is collected for
+  one thing and spent on two.
 - **Only options carry identifiers.** Consequences and undo lines are read, never quoted back,
   so labelling them adds noise and costs words. The rule: *label only what the operator will
   say out loud.*
@@ -67,6 +80,14 @@ one line and the next is spending the budget on navigation.
   all the same failure. An undo the operator has to finish writing while something is on fire is
   not an undo. When a value is not decided yet, decide it in the option itself ("back it up as
   `config.json.bak` beside it, then delete") so that the undo line completes itself.
+- **The undo must move the thing back.** The paste test asks only whether the line runs; it says
+  nothing about what happens when it does. Read the option as the steps it actually performs —
+  *"copy X to Y, then delete X"* — and the undo is those steps reversed: *"put Y back at X"*.
+  The original path is the undo's **destination**, and it has to appear in the command as one.
+  A line that only removes something restores nothing: it is a second deletion wearing the undo
+  label, and it fires at the exact moment the operator is trying to recover, on the only copy
+  they have left. Mechanical check, no judgement needed: **if the path the action removed does
+  not appear in the undo command, the line is not an undo.**
 - **Where a restore credential can be created first — a backup, a branch, a tag — that is its
   own option.** It is usually the one the operator wants, and it is invisible unless offered.
 - **Consequences are stated as facts.** No evaluative wording that tilts toward an option
