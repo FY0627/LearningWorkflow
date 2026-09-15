@@ -19,8 +19,8 @@ Render in the operator's own language. Structure, not wording, is what this file
   B. <option that first creates a restore credential, when one can be created>
   C. <do not proceed>
 
-Consequence:  A <fact> / B <fact> / C <fact>
-Undo:         A none; B <command that runs as printed>; C n/a
+Consequence:  A <every action's outcome> / B <same> / C <same>
+Undo:         A <the option run backwards, or "none"> / B <same> / C <same>
 ```
 
 Keep the identifiers in the same order on every line. A reader who has to re-locate B between
@@ -40,11 +40,20 @@ one line and the next is spending the budget on navigation.
   has no standing to decide whether widening was justified. It exists so the operator is never
   asked to authorise one thing while believing they authorised another. When the two match,
   write nothing extra — the cost is zero on the normal path.
-- **The panel covers the whole action list, not the action that triggered it.** The gate opens
-  because of the highest tier on the list, and then presents all of it. An action that would
-  have been visible on its own — a Tier 0 edit closes with its own trace line, and the operator
-  sees it — must not become invisible by riding along with something bigger. That would leave
-  the gate protecting it worse than no gate at all. **Not on the panel is not authorised.**
+- **Every line covers the whole action list, not the action that triggered it.** The gate opens
+  because of the highest tier on the list, and then presents all of it — **on the stop line, in
+  each consequence, and in each undo.** Naming the second action once at the top and dropping it
+  from the rows below is the same failure in slower motion: the operator reads *"delete `output/`
+  and record it in `notes.md`"*, then reads *"undo: none"*, which is false, because the
+  `notes.md` half is a `git checkout` away. An action that would have been visible on its own —
+  a Tier 0 edit closes with its own trace line, and the operator sees it — must not become
+  invisible by riding along with something bigger. That would leave the gate protecting it worse
+  than no gate at all. **Not on the panel is not authorised, and a row that omits it is not on
+  the panel.**
+- **The template ships no filled-in cells.** `none` and `n/a` are common answers, not defaults.
+  A cell that already holds an answer gets copied instead of decided: a run that printed
+  「撤销：A 无」had never asked whether A could be undone — the template had answered for it, and
+  half of A was recoverable. Every cell is a slot to fill.
 - **Inside the named object, one line carrying its scale; outside it, one line each.** Renaming
   an API touches forty files, deleting a dataset removes three thousand — those are the object
   the operator named, so they compress to *"重命名 X → Y，波及 40 个文件"*, with the count kept as
@@ -125,10 +134,11 @@ everything.
 
 ## Worked examples
 
-Two, deliberately. A single filled-in example cannot tell a reader which of its details are
+Three, deliberately. A single filled-in example cannot tell a reader which of its details are
 required and which are incidental, and it gets copied whole — language, option count and all.
-These two hold the structure constant and vary everything else, so the difference between them
-is the answer to "what am I allowed to change".
+These hold the structure constant and vary everything else, so the differences between them are
+the answer to "what am I allowed to change". Any dimension they all agree on is a dimension the
+reader will copy without noticing it was a choice — which is why the third one exists.
 
 Deleting a TTS dataset that has no backup, raised mid-task:
 
@@ -161,9 +171,31 @@ option to offer:
 
 ≈ 40 characters.
 
-What is constant across both: the stop line, identifiers on options only, a "do not proceed"
-option, consequences as facts, an undo line in the same identifier order. What varies: the
-language, and the wording of each option.
+A task holding two actions at two tiers — delete an untracked directory, then note the deletion
+in a tracked file. Both examples above hold one action each, which would teach a panel to carry
+one:
+
+```
+已暂停:即将删除 output/ 目录,并在 notes.md 记一笔。output/ 无备份,不在 git 中。
+
+  A. 直接删除并记录
+  B. 先备份为 output.bak，再删除并记录
+  C. 两件都不做
+
+后果:A output/ 永久丢失,notes.md 多一行 / B output/ 存为 output.bak,notes.md 多一行 / C 不变
+撤销:A git checkout -- notes.md，output/ 无 / B move output.bak output 且 git checkout -- notes.md / C 不适用
+```
+
+≈ 95 characters.
+
+Note what **A** costs here. Both earlier examples print `none` for A, and a reader who saw only
+those would print `none` here too — but half of A is a `git checkout` away, and writing `none`
+would tell the operator they have less than they do.
+
+What is constant across all three: the stop line, identifiers on options only, a "do not proceed"
+option, consequences as facts, an undo line in the same identifier order, and every action on the
+list appearing in every row. What varies: the language, the wording of each option, **the number
+of options, and the number of actions a row has to carry**.
 
 The second example has two options **because** nothing could be copied aside first — an email
 already sent cannot be un-sent by preparing something beforehand. That is a derived result, not

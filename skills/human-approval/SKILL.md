@@ -129,7 +129,8 @@ The panel must:
 - Use plain language. No jargon the operator would have to look up to decide.
 - Give every option and every risk a short identifier the operator can quote back.
 - State, for each decision: the choice, the part that cannot be undone, the risk being
-  accepted, and the paste-ready undo command.
+  accepted, and the undo command — the chosen option run backwards, written from the state
+  that option leaves behind.
 - Survive the 30-second test: the operator on their worst, most tired day must still be able to
   decide from it. Design for that day, not for an attentive one.
 

@@ -105,6 +105,20 @@ check beside it. A definition alone drifts: *"required whenever a credential can
 read as *whenever it is worth making one*, and the rule then passed on a small file and failed on
 a large directory. **The definition sets the direction; the check stops the drift.**
 
+### Templates and examples outrank the prose above them
+
+Nine recorded runs copied a template or a worked example over the rule stated beside it —
+language, option count, ordering, and once an answer. Two consequences follow.
+
+**A template ships no filled-in cells.** `none` and `n/a` are common answers, not defaults. A run
+printed 「撤销：A 无」 having never asked whether A could be undone; the template had already
+answered, and half of A was a `git checkout` away. Every cell must be a slot.
+
+**Ship examples that disagree on every dimension a reader may vary.** Anything all the examples
+agree on is copied without the reader noticing it was a choice. Two examples that each held a
+single action taught panels to carry a single action, and the rule saying otherwise sat directly
+above them, unread. The fix was a third example that differs precisely there.
+
 ### The rule count is the ceiling, not the token count
 
 Layer 1's cap earns its keep — `SKILL.md` is loaded on every run. Layer 2 is cheaper than it
