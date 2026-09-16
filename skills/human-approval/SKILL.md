@@ -3,7 +3,8 @@ name: human-approval
 description: >-
   Gate that stops execution before an agent acts on an implementation plan or crosses an
   irreversibility line. Requires explicit, plan-specific consent from the operator, and treats
-  silence, questions, partial answers, and after-the-fact notification as refusal. Also governs
+  silence, questions, and after-the-fact notification as no consent; partial answers authorize
+  only the selected items. Also governs
   unattended mode, where the operator delegates and the agent proceeds under a bounded, logged,
   self-expiring action budget instead of open-ended control.
 ---
@@ -42,8 +43,8 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
    **Output Contract**.
 8. Accept only consent that satisfies **Consent**. Anything else is not consent: state what is
    still needed, once, and stop. Do not argue, do not re-explain the plan.
-9. Load `references/authorization-record.md` and record the granted scope: which options, which
-   accepted risks, which action tiers.
+9. Load `references/authorization-record.md` and record the granted scope: selected options,
+   their disclosed consequences and undo conditions, and their action tiers.
 10. During execution, watch the **Expiry** conditions. On any of them, stop and return here.
 
 ## Refusals
@@ -62,13 +63,14 @@ This skill must not:
 
 ## Consent
 
-Consent exists only when the operator returns, from the panel, **by identifier**:
+Consent exists when the operator selects an option **by identifier** from the current panel,
+after that panel has disclosed its action scope, consequences, and undo conditions. The option
+identifier alone is sufficient; do not require a separate risk identifier or a restatement of
+the consequences. Selecting "do not proceed" authorizes no action.
 
-- the option they chose, and
-- the risk they accept.
-
-These identifiers exist only inside the plan. An operator who did not read it cannot produce
-them, and the agent does not need to judge anything to check them.
+The selection authorizes only what that option disclosed. It does not prove the operator read
+or understood it; the agent is responsible for clear disclosure, not testing comprehension.
+If required disclosure is missing, complete the panel and obtain a selection before acting.
 
 **Not consent** — each of these is a real observed failure, not a hypothetical:
 
@@ -127,7 +129,8 @@ The panel must:
 - Be readable without scrolling.
 - Contain at most 3 decisions. Beyond that the operator approves in bulk instead of deciding.
 - Use plain language. No jargon the operator would have to look up to decide.
-- Give every option and every risk a short identifier the operator can quote back.
+- Give each option a short identifier the operator can quote back. Associate consequences
+  and undo conditions with that option; they need no separate identifiers or confirmation.
 - State, for each decision: the choice, the part that cannot be undone, the risk being
   accepted, and the undo command — the chosen option run backwards, written from the state
   that option leaves behind.

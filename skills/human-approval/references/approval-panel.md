@@ -64,7 +64,8 @@ one line and the next is spending the budget on navigation.
   one thing and spent on two.
 - **Only options carry identifiers.** Consequences and undo lines are read, never quoted back,
   so labelling them adds noise and costs words. The rule: *label only what the operator will
-  say out loud.*
+  say out loud.* Selecting an option by identifier is sufficient after its scope, consequences,
+  and undo conditions have been disclosed. Do not ask for a second risk acknowledgment.
 - **One option is always "do not proceed."** Without it the panel silently assumes the work
   should happen and reduces the operator to choosing how. That assumption is the failure this
   gate exists to stop.
@@ -208,5 +209,6 @@ gets three.
   above, and a forward test rendered ~140 Chinese characters excluding commands. See
   `examples/dry-runs.md`.
 - The operator can decide without opening the plan.
-- A reader who has not read the plan cannot produce the identifiers it asks for.
+- An option identifier alone selects exactly its disclosed scope, without requiring the
+  operator to open the plan or repeat consequences. Selecting "do not proceed" permits no action.
 - No rendered panel reads as advocating one of its own options.

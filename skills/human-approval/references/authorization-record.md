@@ -17,7 +17,8 @@ Record, before the first action:
   the earlier action starts taking the later work with it. A window-level restore point is
   what keeps a long unattended run reversible as a unit.
 - **What was approved**: the option identifiers the operator returned, and the highest tier
-  they authorised.
+  they authorised. Preserve the selected options' disclosed action scope, consequences, and
+  undo conditions with the record; an identifier alone loses its meaning when the panel changes.
 - **The stopping condition**, stated before the run rather than judged during it.
 
 ## Before each action
