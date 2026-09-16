@@ -64,7 +64,8 @@ preserves the existing work; overlap alone does not establish collateral loss. I
 discard other work, Q2 is yes; if preservation cannot be established, use Tier 2.
 
 After execution, compare the result with the observed starting state before claiming that
-only planned changes occurred. An undo command must preserve pre-existing changes.
+only planned changes occurred. An undo command must preserve pre-existing changes. All of this
+is checking, not reporting: what reaches the operator is the three-line close in step 6.
 Showing an undo command does not require executing it.
 
 These paired designed cases vary only where pre-existing changes lie; they are not test results:

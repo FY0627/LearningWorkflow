@@ -32,14 +32,17 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
    own — it is carried by the tier above it, and it stays visible there. Alone, a Tier 0 edit
    closes with its own trace line and the operator sees it; bundled under something bigger it
    would vanish, leaving the gate protecting it *worse* than no gate at all.
-6. Tier 0 — every action on the list — requires no gate. Do the work without interrupting, then close
-   with a single line carrying two things: the fact the check established, and the undo command
-   that fact makes available — e.g. *"tracked, worktree clean; `git checkout -- skills/`
-   reverts this"*, phrased in the operator's language, not this file's. After the work, never
-   as a question. Neither half can be written without
-   having actually checked, which is what keeps a silent pass distinguishable from a skill that
-   never loaded. A bare "I applied human-approval" is a claim, not evidence, and does not
-   satisfy this.
+6. Tier 0 — every action on the list — requires no gate, even when the workspace contains
+   unrelated uncommitted changes that execution and undo will preserve. Proceed without asking
+   for a reply. Check in full: the workspace state before acting, whether existing changes
+   overlap the action and its undo, and the result measured against that starting state.
+   **Report almost none of it.** Close with three lines in the operator's language and nothing
+   else — **before**, the state actually found, saying plainly that the workspace is not clean
+   when it is not; **after**, what changed and that nothing else did; **undo**, one instruction
+   that reverts this task's changes and keeps everything the first line named. No headings, no
+   timestamps, no narrating the checks, no caveats true of every undo. A line that could have
+   been written without checking does not belong; "I applied human-approval" is a claim, not
+   evidence. This is a statement after the work, never a question.
 7. Otherwise load `references/approval-panel.md` — now, not earlier — and render the panel per
    **Output Contract**.
 8. Accept only consent that satisfies **Consent**. Anything else is not consent: state what is
