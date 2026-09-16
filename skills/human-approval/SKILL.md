@@ -24,7 +24,8 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
    actions you are adding yourself, and actions that exist only to serve the ones asked for.
    A request is a task; a task is a list. Everything below applies to the list, not to the one
    action that looks like the point.
-3. Classify each action on the list by reversibility. **Lookup only** — load
+3. Classify each action on the list by reversibility — the command that will actually run,
+   not the wording of the request. **Lookup only** — load
    `references/irreversibility-tiers.md` and match. Do not reason about importance.
 4. If an action does not appear in the table, classify it as irreversible. Fail closed.
 5. **The task takes the highest tier on its list.** A lower-tier action gets no path of its
@@ -111,10 +112,19 @@ An approval covers the plan that was approved and nothing else. It expires when:
 
 - A premise the plan explicitly listed is falsified during execution.
 - The action set changes — anything not present in the approved plan.
+- The command changes — a retry, fallback, or recovery move other than the one classified.
 - The reversibility tier of the remaining work rises above the approved tier.
 
 Expired approval returns to step 7. It is not renewed by the agent's own judgement that the
 change was small.
+
+This covers the ungated Tier 0 path too, where what expires is the classification rather than
+an approval. A substituted command returns to step 3 for a fresh lookup. That re-check is
+silent: still Tier 0, execution continues and nothing is said about it. A command the table
+does not clear is refused, not escalated — name it and stop there. Reaching for a different
+command that does clear costs nothing and opens no panel; the panel is for insisting on the
+refused one. Refusing to clear a command is not advice on which command to use; that belongs
+to whoever is doing the work.
 
 **Upstream requirement:** `implementation-plan` must (a) list the premises its plan depends on,
 (b) present decisions in small, separately approvable units, and (c) hand over a closed list of

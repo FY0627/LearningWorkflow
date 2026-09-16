@@ -50,6 +50,30 @@ exists at all.
 - This asks about collateral damage from the undo itself. It does **not** ask whether some
   policy forbids undoing. A rule against reverting is not a property of the action.
 
+### Workspace changes and scope
+
+Inspect workspace status before acting, including staged, unstaged, and untracked changes,
+and compare existing changes with every planned action and its concrete undo scope. A dirty
+workspace alone is not a reason to gate. When execution and undo preserve all existing work,
+unrelated changes do not raise the tier: proceed without requesting confirmation.
+
+Check all affected paths, not just one representative file. Account for commands that also
+change the index or reach outside the named targets. Do not clean, stash, or reset unrelated
+work merely to obtain a clean workspace. Overlap requires checking whether a precise undo
+preserves the existing work; overlap alone does not establish collateral loss. If undo would
+discard other work, Q2 is yes; if preservation cannot be established, use Tier 2.
+
+After execution, compare the result with the observed starting state before claiming that
+only planned changes occurred. An undo command must preserve pre-existing changes.
+Showing an undo command does not require executing it.
+
+These paired designed cases vary only where pre-existing changes lie; they are not test results:
+
+| Planned action and undo | Pre-existing changes | Classification |
+|---|---|---|
+| Edit tracked `src/widget.ts`; restore that path from its checked Git baseline | Only `notes.txt` is modified; the target matches the baseline | Tier 0: execution and undo preserve the unrelated changes; proceed without a gate. |
+| Edit tracked `src/widget.ts`; restore that path from its checked Git baseline | Only `src/widget.ts` is modified; the target differs from the baseline | Tier 1 for this undo: it discards existing edits; a verified precise undo preserving them could instead qualify for Tier 0. |
+
 **Does not count as "other things":**
 
 | Answer | Why it does not count |
