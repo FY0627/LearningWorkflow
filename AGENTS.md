@@ -81,3 +81,15 @@ screenshots. That fact is recorded, not hidden.
 - One structural concern per commit. A rename, a tier promotion, and a content rewrite are
   three commits.
 - Do not commit with a red validator.
+
+## Skill design and evaluation
+
+- Every skill should work independently with user-provided context and also compose into
+  the workflow. Do not claim uninspected content or unrun tests were verified.
+- Aim to reduce routine code-quality burden so developers can focus on user pain points
+  and experience. Design for models of differing capabilities, but establish supported
+  capabilities and quality through actual evaluation rather than promising all models
+  will produce equally good results.
+- Consult current official model guidance for model-specific decisions; distinguish
+  documented recommendations from project design choices. Keep portable skill rules
+  separate from model-specific tuning.
