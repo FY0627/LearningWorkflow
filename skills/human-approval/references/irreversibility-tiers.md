@@ -29,6 +29,12 @@ exists at all.
 - Assess recovery against the actual pre-action state. An existing inverse or recovery source
   is sufficient only if it preserves that state within the affected scope. Proposing a new
   backup does not establish that it exists or can be created successfully.
+- Check existing recovery options before proposing new copies: for example, a corresponding
+  Git version or a precise inverse. Do not default to a `.bak` beside every file without this
+  check; unnecessary copies add cleanup and recovery ambiguity for the operator. This is not
+  a ban on backups or a rule that Git always wins: uncommitted, untracked, or ignored content
+  is not preserved by a Git reference unless actually captured. When existing recovery is
+  insufficient, offer a feasible backup rather than assuming Git can restore missing state.
 - If no existing safe inverse is established and recovery requires a new backup, creating
   it first becomes an option on the panel. That
   costs the operator one keystroke, and costs nothing at all if the credential turns out to

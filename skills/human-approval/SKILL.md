@@ -162,6 +162,10 @@ The panel must:
   that option leaves behind.
 - Make scope, consequences, and recovery understandable from the panel itself, without
   requiring the operator to reconstruct the implementation history.
+- Meet the 30-second reading test: even a tired operator should be able to understand the
+  pending choices, main consequences, and recovery options in about 30 seconds. This is a
+  panel usability target, not an execution deadline. Never hide necessary information to
+  meet it; follow the overflow rules when the decision cannot fit.
 
 The panel must **not** contain how the work will be done. Implementation detail is delegated
 work; it belongs in the plan, not in the gate. It is the primary cause of panel bloat.
