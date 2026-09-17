@@ -1,214 +1,133 @@
 # Approval Panel Template
 
-Loaded by `human-approval` at Workflow step 7, when a gate has been triggered and the panel
-must be rendered.
+Loaded by `human-approval` at Workflow step 7 when a gate has triggered.
 
-## Purpose
+## Output layout
 
-Fix the panel's shape so the 100-word ceiling and the 3-decision ceiling are enforced by a
-template rather than by the model's restraint on any given run.
+Render a review subject above a table. Translate the subject, headers, options, and
+consequences into the operator's language. Keep commands and paths literal.
 
-## Template
+```text
+Stopped: [actual objects and actions awaiting a decision]
 
-Render in the operator's own language. Structure, not wording, is what this file fixes.
-
-```
-<one line: what is about to happen, and that it has stopped here>
-
-  A. <option>
-  B. <option that first creates a restore credential, when one can be created>
-  C. <do not proceed>
-
-Consequence:  A <every action's outcome> / B <same> / C <same>
-Undo:         A <the option run backwards, or "none"> / B <same> / C <same>
-```
-
-Keep the identifiers in the same order on every line. A reader who has to re-locate B between
-one line and the next is spending the budget on navigation.
-
-## Rules
-
-- **Ceiling: 150 Chinese characters, or 100 English words.** Commands and file paths do not
-  count — they are payload to paste, not text to read; the operator scans them to see what they
-  are and reads them only when actually undoing something. The ceiling is a ceiling, not a
-  quota.
-- **Render everything in the operator's language, labels included.** A Chinese panel with
-  `Consequence:` / `Undo:` headings is half-translated.
-- **The stop line names what is actually about to be touched, compared against what was
-  asked.** If they differ — wider, narrower, or a different object — say so in a few words:
-  *"你要求删 apk，实际要删的是整个 build 目录"*. This is a comparison, not a verdict; the panel
-  has no standing to decide whether widening was justified. It exists so the operator is never
-  asked to authorise one thing while believing they authorised another. When the two match,
-  write nothing extra — the cost is zero on the normal path.
-- **Every line covers the whole action list, not the action that triggered it.** The gate opens
-  because of the highest tier on the list, and then presents all of it — **on the stop line, in
-  each consequence, and in each undo.** Naming the second action once at the top and dropping it
-  from the rows below is the same failure in slower motion: the operator reads *"delete `output/`
-  and record it in `notes.md`"*, then reads *"undo: none"*, which is false, because the
-  `notes.md` half is a `git checkout` away. An action that would have been visible on its own —
-  a Tier 0 edit closes with its own trace line, and the operator sees it — must not become
-  invisible by riding along with something bigger. That would leave the gate protecting it worse
-  than no gate at all. **Not on the panel is not authorised, and a row that omits it is not on
-  the panel.**
-- **The template ships no filled-in cells.** `none` and `n/a` are common answers, not defaults.
-  A cell that already holds an answer gets copied instead of decided: a run that printed
-  「撤销：A 无」had never asked whether A could be undone — the template had answered for it, and
-  half of A was recoverable. Every cell is a slot to fill.
-- **Inside the named object, one line carrying its scale; outside it, one line each.** Renaming
-  an API touches forty files, deleting a dataset removes three thousand — those are the object
-  the operator named, so they compress to *"重命名 X → Y，波及 40 个文件"*, with the count kept as
-  a fact so the magnitude stays visible. An action outside that object never compresses, however
-  small: a `.gitignore` edit nobody asked for gets its own line beside a 40GB deletion. **The
-  test is not size. It is whether the action exists only because the named thing is being acted
-  on, or is a second decision made here.** Fold the second kind in and consent is collected for
-  one thing and spent on two.
-- **Only options carry identifiers.** Consequences and undo lines are read, never quoted back,
-  so labelling them adds noise and costs words. The rule: *label only what the operator will
-  say out loud.* Selecting an option by identifier is sufficient after its scope, consequences,
-  and undo conditions have been disclosed. Do not ask for a second risk acknowledgment.
-- **One option is always "do not proceed."** Without it the panel silently assumes the work
-  should happen and reduces the operator to choosing how. That assumption is the failure this
-  gate exists to stop.
-- **The option set is derived, not chosen.** What varies is what each option says; how many
-  there are is a result, not a style decision. Build it in this order:
-  1. The direct action.
-  2. Create the restore credential first, then act. **Anything sitting on disk can be copied
-     aside — one file, a directory, a whole build tree — so for anything on disk this option is
-     always present.** Size is not a reason to drop it, and neither is "not worth copying":
-     whether the copy is worth making is the operator's call, and dropping the option takes
-     that call away from them. It is absent only when nothing at all can be prepared
-     beforehand — a message already sent, a charge already made.
-  3. Do not proceed.
-
-  So **two options is a claim**: it says no credential could be created here. If that claim is
-  true, say it on the panel in three or four words. If it is not true, the panel is missing the
-  one option that changes the outcome. Five options means the decision is too big and belongs
-  upstream, split.
-- **The paste test.** Before printing an undo line, do this to it: select it, paste it into a
-  terminal, press enter. If any part of it would have to be replaced first, it fails. How that
-  part is dressed makes no difference — `<backup_path>`, 备份路径, `your_dir`, a blank space are
-  all the same failure. An undo the operator has to finish writing while something is on fire is
-  not an undo. When a value is not decided yet, decide it in the option itself ("back it up as
-  `config.json.bak` beside it, then delete") so that the undo line completes itself.
-- **The undo is the option run backwards.** The option's end state is the undo's starting point;
-  the option's starting point is the undo's destination. Write every command in the undo line as
-  if the option had already been carried out — the backup exists, the original is gone — because
-  that is the only moment the line is ever read. Two mechanical checks, no judgement in either:
-  **does each command's source still exist once the option has run**, and **does the option's
-  starting point appear in the undo line as a destination**. A command valid only *before* the
-  option runs — the backup step itself — fails the first and does not belong here; pasted during
-  a recovery it errors on a missing source, at the worst possible moment. A line that only
-  removes something fails the second: it restores nothing, and it lands on the one copy the
-  operator has left.
-- **Where a restore credential can be created first — a backup, a branch, a tag — that is its
-  own option.** It is usually the one the operator wants, and it is invisible unless offered.
-- **Consequences are stated as facts.** No evaluative wording that tilts toward an option
-  ("looks messy", "not worth keeping"). The panel presents; it does not campaign.
-- **No "why" line that echoes the operator.** Restating what they already said consumes the
-  budget and adds nothing to the decision.
-- **Undo is a command, not a description.** "Restore the backup to the right place" is not an
-  undo. Options with no undo say so plainly; options that changed nothing say n/a.
-- **Tiers are not printed.** 0/1/2 is machine vocabulary for budget and stop conditions. The
-  panel says whether it can be taken back, in plain words. Same fact, two audiences.
-
-## When it does not fit
-
-Not fitting is a signal, not a formatting problem: the decision on this screen is bigger than
-one decision. Send it back upstream to be split before compressing anything.
-
-If it still does not fit after splitting, give way in this order — and never silently:
-
-| Give way first | | Never give way |
+| Option | Consequence | Undo |
 |---|---|---|
-| 1. Consequence detail | 2. The ceiling — **say the panel exceeded it** | 3. The irreversible part · 4. Any option |
-
-An operator who loses consequence detail knows they can ask for more. An operator who loses an
-option does not know anything was taken. **Unobservable loss is protected last.**
-
-Exceeding the ceiling must be stated on the panel, not absorbed quietly. The ceiling exists so
-the panel still works on the operator's most tired day; if it is being exceeded routinely, that
-is upstream sending decisions too large, and the drift needs to be visible to be caught.
-
-Dropping an option or an irreversible consequence to satisfy the ceiling is never permitted.
-A panel that hides an option is worse than no panel, because the operator believes they saw
-everything.
-
-## Worked examples
-
-Three, deliberately. A single filled-in example cannot tell a reader which of its details are
-required and which are incidental, and it gets copied whole — language, option count and all.
-These hold the structure constant and vary everything else, so the differences between them are
-the answer to "what am I allowed to change". Any dimension they all agree on is a dimension the
-reader will copy without noticing it was a choice — which is why the third one exists.
-
-Deleting a TTS dataset that has no backup, raised mid-task:
-
-```
-Stopped: about to delete the old TTS dataset. There is no backup.
-
-  A. Delete it
-  B. Back it up elsewhere first, then delete
-  C. Do not delete
-
-Consequence:  A gone for good / B recoverable / C old dataset keeps taking space
-Undo:         A none; B mv data/tts_dataset_old data/tts_dataset; C n/a
+| A. [direct action] | [outcomes, irreversible part, accepted risk] | [concrete undo or —] |
+| B. [create recovery first, then act, when feasible] | [outcomes and recovery conditions] | [concrete undo] |
+| C. [do not proceed] | [what remains unchanged] | — |
 ```
 
-≈ 60 words.
+The cells above are slots, not wording to copy. One row represents one option, not a separate
+approval for its consequences. Selecting its identifier is sufficient for its disclosed scope.
 
-Sending a statement to a customer — different language, two options rather than three, and no
-credential that can be created first, so there is no "back it up and then proceed" middle
-option to offer:
+## Content rules
 
+- The subject names what will actually be touched. If it differs from the request, disclose
+  the wider, narrower, or changed target. Do not silently substitute a different object.
+- Every option covers its entire action list, including supporting actions and lower-tier
+  changes bundled with the action that opened the gate. Undisclosed actions are not authorized.
+- Use separate option, consequence, and undo columns. Only options receive identifiers.
+  Do not repeat an identifier in separate consequence and undo paragraphs.
+- Use an em dash in the undo cell when nothing can or needs to be undone. Consequences must
+  distinguish permanent loss from no change; the dash alone does not explain that difference.
+- For mixed actions, identify the irreversible part and provide commands for the recoverable
+  part. Never replace a partly available undo with a dash for the whole option.
+- Include a do-not-proceed option. Offer direct action and, when feasible, recovery preparation
+  followed by action. Choose a concrete backup destination and check it will not overwrite
+  existing content. Do not omit recovery just because the agent thinks copying is not worthwhile.
+  Do not promise a backup despite known space, permission, or consistency obstacles. If recovery
+  cannot be prepared, state the limitation briefly. A copy of a message does not undo sending it.
+- Consequences state facts and risks, not advocacy. Do not add a paragraph repeating the request.
+- Keep implementation details outside the panel except the concrete recovery choice and undo
+  commands needed for an informed decision. Do not print internal tier numbers.
+- Within one requested object, summarize scale when checked. Independently chosen extra work
+  remains separately visible; do not hide it inside a broader action's description.
+
+## Undo validation
+
+An undo command starts from the state that its option would leave behind. Verify that its
+sources would exist, destinations match the original state, and unrelated work is preserved.
+Use a command appropriate to the actual shell, with concrete paths and necessary conditions.
+Do not print placeholders or descriptions such as "restore the backup" in a live undo cell.
+
+The paste test is a completeness check, not an instruction to execute recovery before approval.
+Do not run a destructive undo merely to demonstrate it. If later edits would make the printed
+command unsafe, disclose that material condition. Never call a backup command an undo command.
+
+## Size and overflow
+
+Aim for one screen: at most 150 Chinese characters or 100 English words, excluding literal
+commands and paths. These are ceilings, not quotas; do not hide long prose inside code spans.
+Keep at most three decisions in one panel; decisions are not the same as alternative options.
+Split independent decisions upstream when necessary, using unambiguous option identifiers.
+
+If the complete disclosure cannot fit, shorten nonessential explanation first. Preserve action
+scope, irreversible consequences, recovery conditions, and meaningful options. Exceed the
+ceiling explicitly rather than dropping those facts. Do not render the panel repeatedly in
+one turn. Additional explanation belongs outside the decision summary when needed for clarity.
+
+## Designed examples — not execution evidence
+
+The first two cases keep the layout and operation constant while varying language and paths.
+Assume a POSIX shell, the named source exists, the backup destination does not, and the original
+is absent after deletion. Real panels must check their own facts and use the actual shell.
+
+```text
+Stopped: delete data/samples; no backup exists.
+
+| Option | Consequence | Undo |
+|---|---|---|
+| A. Delete | Original permanently lost | — |
+| B. Copy to data/samples.bak, then delete | Original recoverable from backup | mv -- data/samples.bak data/samples |
+| C. Keep | Original unchanged | — |
 ```
-已暂停:即将向客户发送对账邮件。
 
-  A. 发送
-  B. 不发送
+```text
+待确认：删除 exports/report；当前无备份。
 
-后果:A 对方立即看到,无法撤回 / B 保持未发送
-撤销:A 无;B 不适用
+| 选项 | 后果 | 撤销 |
+|---|---|---|
+| A. 直接删除 | 原内容永久丢失 | — |
+| B. 复制到 exports/report.bak 后删除 | 原内容可从备份恢复 | mv -- exports/report.bak exports/report |
+| C. 保留 | 原内容不变 | — |
 ```
 
-≈ 40 characters.
+An external effect has the same columns but no fictitious recovery option:
 
-A task holding two actions at two tiers — delete an untracked directory, then note the deletion
-in a tracked file. Both examples above hold one action each, which would teach a panel to carry
-one:
+```text
+待确认：向客户发送对账邮件；发送后无法撤回。
 
-```
-已暂停:即将删除 output/ 目录,并在 notes.md 记一笔。output/ 无备份,不在 git 中。
-
-  A. 直接删除并记录
-  B. 先备份为 output.bak，再删除并记录
-  C. 两件都不做
-
-后果:A output/ 永久丢失,notes.md 多一行 / B output/ 存为 output.bak,notes.md 多一行 / C 不变
-撤销:A git checkout -- notes.md，output/ 无 / B move output.bak output 且 git checkout -- notes.md / C 不适用
+| 选项 | 后果 | 撤销 |
+|---|---|---|
+| A. 发送 | 收件人收到邮件，无法撤回 | — |
+| B. 不发送 | 邮件保持未发送 | — |
 ```
 
-≈ 95 characters.
+For a mixed task, assume `notes.md` matches HEAD in both index and worktree before acting,
+only the stated note will be added, no later edits exist, and a POSIX shell is in use:
 
-Note what **A** costs here. Both earlier examples print `none` for A, and a reader who saw only
-those would print `none` here too — but half of A is a `git checkout` away, and writing `none`
-would tell the operator they have less than they do.
+```text
+Stopped: delete output/ and record it in notes.md; output/ has no backup.
 
-What is constant across all three: the stop line, identifiers on options only, a "do not proceed"
-option, consequences as facts, an undo line in the same identifier order, and every action on the
-list appearing in every row. What varies: the language, the wording of each option, **the number
-of options, and the number of actions a row has to carry**.
+| Option | Consequence | Undo |
+|---|---|---|
+| A. Delete and record | output/ permanently lost; notes.md gains the note | git restore -- notes.md |
+| B. Copy to output.bak, delete and record | output/ recoverable; notes.md gains the note | mv -- output.bak output && git restore -- notes.md |
+| C. Do neither | Both unchanged | — |
+```
 
-The second example has two options **because** nothing could be copied aside first — an email
-already sent cannot be un-sent by preparing something beforehand. That is a derived result, not
-a shorter format to imitate. Anything sitting on disk can be copied aside, so anything on disk
-gets three.
+The undo in A restores only the note; the deleted output remains unrecoverable.
+The mixed example illustrates why an irreversible option can still contain a useful undo.
 
-## Acceptance criteria
+## Validation status
 
-- Rendering a real decision with this template stays under the ceiling. **Met** — the example
-  above, and a forward test rendered ~140 Chinese characters excluding commands. See
-  `examples/dry-runs.md`.
-- The operator can decide without opening the plan.
-- An option identifier alone selects exactly its disclosed scope, without requiring the
-  operator to open the plan or repeat consequences. Selecting "do not proceed" permits no action.
-- No rendered panel reads as advocating one of its own options.
+This revised table layout and its examples have not yet been forward-tested in Antigravity.
+Previous results for the list layout do not establish that this revision works.
+
+Acceptance checks for the next run:
+
+- Subject and actual action scope match, or the difference is explicit.
+- Each option has separate consequences and undo; irreversible loss is explicit.
+- An identifier authorizes exactly the disclosed option, without a second acknowledgment.
+- Available recovery is concrete, applicable, and preserves unrelated work.
+- The panel remains concise without dropping a decision-relevant fact.

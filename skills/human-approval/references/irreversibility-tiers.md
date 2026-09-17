@@ -5,9 +5,8 @@ on that list is classified separately; the task then takes the highest tier amon
 
 ## Purpose
 
-Decide which tier a pending action falls into, **by matching, not by judgement**. The gate
-skill is forbidden from assessing importance; this file is where that assessment is replaced
-by something checkable.
+Decide the tier from the two questions below, using the actual action and its concrete undo.
+Do not judge importance or match action names to an exhaustive list.
 
 ## The two questions
 
@@ -18,18 +17,22 @@ exists at all.
 **Q1 — Can the operator undo it themselves?**
 
 - Is there a command that reverses it, and can that command be written down *before* acting?
+- A precise inverse can be sufficient without a separate backup or commit. For an edit,
+  determine whether it preserves the observed pre-action content, encoding, and line endings.
+  The implementation must supply an executable inverse, not just describe the desired result.
 - A credential that does not exist yet but can be created first — a backup, a branch, a tag —
   counts only once it actually exists. Classify the action as it stands right now.
 - **Check before concluding, in either direction.** "It's source code, so it's probably in
   git" is an assumption, and so is treating a credential as absent without looking. Where the
-  environment allows it, look: is there a `.git`, is the worktree clean, does a backup already
-  exist. Only when the check is impossible, or comes back negative, is the credential absent.
+  environment allows it, inspect the relevant target state and proposed recovery source.
+  A dirty target rules out a whole-file Git restore that would lose edits, not every undo.
 - **A universal fallback is not a substitute for checking.** Proposing a `.bak` copy beside
   every file works in every environment, which is exactly why it is tempting — and why it
   hides the question instead of answering it. Its cost lands on the operator, who ends up with
   a directory full of `.bak` files. Where a check would reveal a cleaner credential — a commit,
   a branch — do the check and offer that one.
-- Where the credential can be created, creating it first becomes an option on the panel. That
+- If no existing safe inverse is established and recovery requires a new backup, creating
+  it first becomes an option on the panel. That
   costs the operator one keystroke, and costs nothing at all if the credential turns out to
   have been there.
 - "Themselves" is the operative word. If undoing depends on a party the operator does not
@@ -64,9 +67,26 @@ preserves the existing work; overlap alone does not establish collateral loss. I
 discard other work, Q2 is yes; if preservation cannot be established, use Tier 2.
 
 After execution, compare the result with the observed starting state before claiming that
-only planned changes occurred. An undo command must preserve pre-existing changes. All of this
-is checking, not reporting: what reaches the operator is the three-line close in step 6.
+only planned changes occurred. Evidence supports only what it measures: a status listing
+establishes listed state, not content identity. Limit the claim to the relevant verification;
+do not broaden inspection merely to make a universal "nothing else changed" statement.
+An undo command must preserve pre-existing changes. All of this
+is checking, not reporting: what reaches the operator is the brief, evidence-based close in step 6.
 Showing an undo command does not require executing it.
+
+Choose an undo that preserves existing work when one can be established; do not choose a
+known destructive whole-file restore merely to classify an otherwise reversible edit as Tier 1.
+If a precise inverse cannot be established, state what is missing and present the applicable
+options rather than repeatedly reconsidering the same evidence. For later use, disclose the
+undo's state assumptions; where practical, have it refuse to write when those assumptions fail.
+
+These paired designed cases vary only the inverse method; neither is execution evidence.
+In both, a file contains uncommitted user edits before an agent appends known bytes:
+
+| Undo method | Classification |
+|---|---|
+| Restore the whole file from Git, losing the user's earlier edits | Tier 1 for this method; seek a preserving inverse before gating. |
+| Check the expected post-edit bytes, then remove exactly the appended bytes, preserving the original bytes and index | Tier 0; no new backup is required. Refuse the undo if the expected state no longer matches. |
 
 These paired designed cases vary only where pre-existing changes lie; they are not test results:
 
@@ -116,6 +136,12 @@ If either question cannot be answered, the action is Tier 2. Fail closed.
   into a gate — which gets the gate switched off within days.
 
 ## Acceptance criteria
+
+One operator-supplied Antigravity run after the precise-inverse revision proceeded without a
+gate on a dirty target and supplied a suffix-checked undo. The UI reported 59 seconds versus
+about three minutes in the earlier run. This is a single observation, not a latency benchmark;
+operator execution of that undo has not yet been confirmed. The subsequent reporting and
+inspection-boundary wording changes still need forward testing.
 
 - Every tier has at least one real, non-hypothetical example. **Met.**
 - An unrehearsed action can be classified without the reader stalling or answering the wrong
