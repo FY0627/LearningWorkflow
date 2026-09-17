@@ -137,16 +137,10 @@ If either question cannot be answered, the action is Tier 2. Fail closed.
 
 ## Acceptance criteria
 
-One operator-supplied Antigravity run after the precise-inverse revision proceeded without a
-gate on a dirty target and supplied a suffix-checked undo. The UI reported 59 seconds versus
-about three minutes in the earlier run. This is a single observation, not a latency benchmark;
-operator execution of that undo has not yet been confirmed. The subsequent reporting and
-inspection-boundary wording changes still need forward testing.
-
-- Every tier has at least one real, non-hypothetical example. **Met.**
-- An unrehearsed action can be classified without the reader stalling or answering the wrong
-  question. **Partially met** — deleting a build output was classified correctly in four
-  consecutive runs after the *Regenerating is not undoing* bullet was added; before it, the same
-  action reached Tier 0. Q2's exclusion table still has no forward test of its own.
+- Each tier's evaluation includes an actual run with recorded evidence, not only designed examples.
+- An unfamiliar action is classified using Q1 and Q2 with the relevant observed facts;
+  neither its absence from examples nor a desired execution speed determines the tier.
+- A proposed clean undo restores the pre-action state within its stated scope while preserving
+  existing work; its applicability conditions and any unresolved limitations are explicit.
 - Two different people applying this file to the same action reach the same tier.
 - No step requires the reader to decide whether something is "important" or "risky".

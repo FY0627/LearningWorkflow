@@ -14,11 +14,13 @@ Stopped: [actual objects and actions awaiting a decision]
 |---|---|---|
 | A. [direct action] | [outcomes, irreversible part, accepted risk] | [concrete undo or —] |
 | B. [create recovery first, then act, when feasible] | [outcomes and recovery conditions] | [concrete undo] |
-| C. [do not proceed] | [what remains unchanged] | — |
+| C. [do not proceed] | [what remains unchanged] | [applicable undo or —] |
 ```
 
 The cells above are slots, not wording to copy. One row represents one option, not a separate
 approval for its consequences. Selecting its identifier is sufficient for its disclosed scope.
+Determine each cell from the option's actual effects. Neither "no undo" nor a backup command
+is a default answer to copy from a template or example.
 
 ## Content rules
 
@@ -26,6 +28,9 @@ approval for its consequences. Selecting its identifier is sufficient for its di
   the wider, narrower, or changed target. Do not silently substitute a different object.
 - Every option covers its entire action list, including supporting actions and lower-tier
   changes bundled with the action that opened the gate. Undisclosed actions are not authorized.
+  Name the full scope in the subject, and account for each action in every option's consequence
+  and undo cells. Mentioning a supporting action only in the subject is insufficient. An option
+  that omits an action must explicitly leave it unchanged, not silently hide its effects.
 - Use separate option, consequence, and undo columns. Only options receive identifiers.
   Do not repeat an identifier in separate consequence and undo paragraphs.
 - Use an em dash in the undo cell when nothing can or needs to be undone. Consequences must
@@ -42,6 +47,17 @@ approval for its consequences. Selecting its identifier is sufficient for its di
   commands needed for an informed decision. Do not print internal tier numbers.
 - Within one requested object, summarize scale when checked. Independently chosen extra work
   remains separately visible; do not hide it inside a broader action's description.
+  The distinction is dependency, not size: necessary work to achieve the named change may be
+  summarized with it; a separate change chosen by the agent is a separate decision, however
+  small. For example, a rename spanning many files can be one decision, while an unrelated
+  configuration edit beside it cannot inherit that consent.
+
+Derive the options from actual recovery possibilities: direct action, preparation of recovery
+when feasible, and no action. Do not select an option count for visual consistency. Omitting
+recovery asserts that no applicable recovery can be prepared; disclose the checked obstacle.
+A large copy is not automatically infeasible, but an existing permission, capacity, or
+consistency obstacle must not be concealed. Several independent choices should be split
+upstream rather than folded into one identifier.
 
 ## Undo validation
 
@@ -118,13 +134,12 @@ Stopped: delete output/ and record it in notes.md; output/ has no backup.
 
 The undo in A restores only the note; the deleted output remains unrecoverable.
 The mixed example illustrates why an irreversible option can still contain a useful undo.
+Across these examples the disclosure structure stays fixed. Language, paths, option count,
+and the number of actions vary with the actual task. The email has no recovery option because
+keeping a copy cannot reverse delivery; the mixed case retains the note's undo because
+irreversibility of one action does not erase recovery available for another.
 
-## Validation status
-
-This revised table layout and its examples have not yet been forward-tested in Antigravity.
-Previous results for the list layout do not establish that this revision works.
-
-Acceptance checks for the next run:
+## Acceptance criteria
 
 - Subject and actual action scope match, or the difference is explicit.
 - Each option has separate consequences and undo; irreversible loss is explicit.
