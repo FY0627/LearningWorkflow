@@ -26,11 +26,9 @@ exists at all.
   git" is an assumption, and so is treating a credential as absent without looking. Where the
   environment allows it, inspect the relevant target state and proposed recovery source.
   A dirty target rules out a whole-file Git restore that would lose edits, not every undo.
-- **A universal fallback is not a substitute for checking.** Proposing a `.bak` copy beside
-  every file works in every environment, which is exactly why it is tempting — and why it
-  hides the question instead of answering it. Its cost lands on the operator, who ends up with
-  a directory full of `.bak` files. Where a check would reveal a cleaner credential — a commit,
-  a branch — do the check and offer that one.
+- Assess recovery against the actual pre-action state. An existing inverse or recovery source
+  is sufficient only if it preserves that state within the affected scope. Proposing a new
+  backup does not establish that it exists or can be created successfully.
 - If no existing safe inverse is established and recovery requires a new backup, creating
   it first becomes an option on the panel. That
   costs the operator one keystroke, and costs nothing at all if the credential turns out to
@@ -131,9 +129,8 @@ If either question cannot be answered, the action is Tier 2. Fail closed.
 - Classification is evaluated **at the moment of the check**, not in the abstract. Deleting a
   directory is Tier 2 without a backup and Tier 0 after one is made. Reversibility can be
   manufactured; the gate's job is to report which one is true right now.
-- This file deliberately does not enumerate actions. An action list would always be
-  incomplete, and combined with fail-closed an incomplete list turns every unlisted action
-  into a gate — which gets the gate switched off within days.
+- Examples are illustrative. Classify unfamiliar actions through Q1 and Q2 rather than
+  treating absence from the examples as evidence of irreversibility.
 
 ## Acceptance criteria
 

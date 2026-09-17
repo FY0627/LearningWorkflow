@@ -79,8 +79,9 @@ Split independent decisions upstream when necessary, using unambiguous option id
 
 If the complete disclosure cannot fit, shorten nonessential explanation first. Preserve action
 scope, irreversible consequences, recovery conditions, and meaningful options. Exceed the
-ceiling explicitly rather than dropping those facts. Do not render the panel repeatedly in
-one turn. Additional explanation belongs outside the decision summary when needed for clarity.
+ceiling explicitly rather than dropping those facts. Do not repeat an unchanged panel;
+when material disclosure changes, replace it clearly before seeking a new selection.
+Additional explanation belongs outside the decision summary when needed for clarity.
 
 ## Designed examples — not execution evidence
 

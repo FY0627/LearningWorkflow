@@ -12,10 +12,10 @@ spent, so the record is executable rather than descriptive.
 
 Record, before the first action:
 
-- **A restore point for the whole window** — a branch, tag, or commit hash. Not per action:
-  per window. Tier 0 actions stack, and once later work sits on top of earlier work, undoing
-  the earlier action starts taking the later work with it. A window-level restore point is
-  what keeps a long unattended run reversible as a unit.
+- **Recovery for the whole unattended window**, in addition to per-action undo. Record the
+  actual source and restoration procedure covering the affected pre-window state. A Git
+  reference alone does not preserve uncommitted, untracked, or ignored content. Verify the
+  recovery coverage before relying on it; this record does not create a snapshot by itself.
 - **What was approved**: the option identifiers the operator returned, and the highest tier
   they authorised. Preserve the selected options' disclosed action scope, consequences, and
   undo conditions with the record; an identifier alone loses its meaning when the panel changes.
@@ -44,9 +44,11 @@ a closed list, "finish what can be finished" means "keep going".
 Work discovered mid-window that is not on the list is not one more Tier 0 item to absorb. It
 changes the action set, which expires the authorisation. Stop and return.
 
-If an action fails partway rather than being stopped before it starts, apply the credential
-recorded for it, close the window, and return with the failure. Do not attempt a second action
-to repair the first — repair is not on the approved list.
+If an action fails partway, inspect the resulting state before attempting recovery. Apply the
+recorded undo only if it remains applicable, covered by the authorization, and preserves other
+work. Otherwise leave execution paused and disclose the state and needed decision. Reclassify
+any substituted recovery under the entrypoint's Expiry rules; failure does not itself authorize
+new repair work. Close the unattended window and report the outcome.
 
 ## When the window closes
 

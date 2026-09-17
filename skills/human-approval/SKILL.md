@@ -11,8 +11,8 @@ description: >-
 
 This skill grants nothing. It records what the operator granted and refuses everything else.
 
-Its adversary is not a malicious user. Its adversary is a tired operator who wants to stop
-reading. Every rule below exists because approval gates fail by being *passed*, not bypassed.
+Keep authority tied to disclosed actions and consequences. Reduce the operator's reading
+burden without omitting information needed to choose or recover.
 
 ## Workflow
 
@@ -44,8 +44,8 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
    a request for confirmation; no fixed line count overrides necessary task information.
 7. Otherwise load `references/approval-panel.md` — now, not earlier — and render the panel per
    **Output Contract**.
-8. Accept only consent that satisfies **Consent**. Anything else is not consent: state what is
-   still needed, once, and stop. Do not argue, do not re-explain the plan.
+8. Accept only consent that satisfies **Consent**. Otherwise leave execution paused and state
+   what selection is missing. Answer clarification questions without treating them as approval.
 9. Load `references/authorization-record.md` and record the granted scope: selected options,
    their disclosed consequences and undo conditions, and their action tiers.
 10. During execution, watch the **Expiry** conditions. On any of them, stop and return here.
@@ -54,9 +54,11 @@ reading. Every rule below exists because approval gates fail by being *passed*, 
 
 Use current workspace evidence to resolve Q1 and Q2, then proceed or present the panel.
 Do not repeat a resolved check without a changed fact, failed command, or conflicting result.
-Inspect the reach of both execution and undo. Each additional inspection must resolve a
-specific uncertainty that could change authorization, classification, or verification.
-Stop expanding when the evidence suffices to decide. Examples illustrate criteria; only
+Before an additional inspection, identify the missing fact and how its possible values would
+change the scope, Q1/Q2 answers, or result verification. Stop expanding once the action's reach,
+authorization, and recovery conditions are established, or a specific unresolved condition
+requires a panel. After acting, check the actual result against the intended change. Examples
+illustrate criteria; only
 observed task facts establish current state. Supporting checks with side effects belong to
 the action list and must preserve existing work just like the requested action.
 
@@ -70,9 +72,10 @@ This skill must not:
   this skill's own assessment.
 - Judge whether the operator's answer shows sufficient understanding. It matches identifiers;
   it does not grade the operator.
-- Infer consent from tone, momentum, prior approvals, or the absence of an objection.
+- Infer consent from tone, momentum, unrelated or expired approvals, or absence of objection.
 - Report a decision it already acted on and call that approval.
-- Re-render the panel more than once per turn. A gate that nags gets uninstalled.
+- Repeat an unchanged panel to solicit assent. Replace it when material disclosure changes;
+  identify the change and make clear which version a new selection would authorize.
 
 ## Consent
 
@@ -85,7 +88,9 @@ The selection authorizes only what that option disclosed. It does not prove the 
 or understood it; the agent is responsible for clear disclosure, not testing comprehension.
 If required disclosure is missing, complete the panel and obtain a selection before acting.
 
-**Not consent** — each of these is a real observed failure, not a hypothetical:
+Interpret replies by what they authorize, not by a blacklist of phrases. General assent does
+not identify an option; delegation does not select an irreversible action; a question requests
+information. The examples below illustrate these distinctions rather than enumerate replies.
 
 | The operator says | What it means here |
 |---|---|
@@ -100,9 +105,8 @@ a partial answer into a full one.
 
 ## Unattended Mode
 
-When the operator delegates rather than approves, do not refuse and do not take open-ended
-control. Refusing gets the skill removed; open-ended control is the failure it exists to
-prevent. Enter a bounded window instead:
+When the operator delegates decisions, establish a bounded task list and stopping conditions.
+Delegation alone does not expand authority beyond that list or authorize higher-tier actions:
 
 - The budget is **the approved plan's Tier 0 items** — not a count, and not a clock. Work
   through them and return; do not extend the list with items that merely look small.
@@ -156,8 +160,8 @@ The panel must:
 - State, for each decision: the choice, the part that cannot be undone, the risk being
   accepted, and the undo command — the chosen option run backwards, written from the state
   that option leaves behind.
-- Survive the 30-second test: the operator on their worst, most tired day must still be able to
-  decide from it. Design for that day, not for an attentive one.
+- Make scope, consequences, and recovery understandable from the panel itself, without
+  requiring the operator to reconstruct the implementation history.
 
 The panel must **not** contain how the work will be done. Implementation detail is delegated
 work; it belongs in the plan, not in the gate. It is the primary cause of panel bloat.
