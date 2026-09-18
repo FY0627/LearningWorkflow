@@ -29,7 +29,7 @@ Waiting is the default. An explicit cancellation is accepted without a permanent
 - A Git repository is not a verified checkpoint. Distinguish existing and proposed recovery.
   Approval of preparation does not prove preparation succeeded.
 - An irreversible external effect remains visible even when file changes have a checkpoint.
-- Recovery commands belong in execution handoff/results when needed, not every review panel.
+- Show recovery readiness, coverage, and limitations; do not generate or display recovery commands.
 - Replace material changes with a clearly identified new panel. Do not repeat unchanged panels.
 
 ## Paired designed examples — not execution evidence

@@ -1,6 +1,9 @@
 # Plan Authorization Record
 
-Load when checking existing authority or recording approval.
+Load when a supplied or referenced prior approval must be checked, or when explicit new
+approval must be recorded. Do not load just because a plan awaits review or the operator
+asks a question or requests adjustments. This file specifies a record; reading it grants
+no authority and is not itself an approval.
 Use the workflow's existing task record; do not create a new file or commit requirement merely
 for this gate. The receiving executor must have access to the record.
 
