@@ -1,191 +1,77 @@
 ---
 name: human-approval
 description: >-
-  Check authorization and reversibility before actions. Proceed with requested, fully
-  reversible work; gate actions with irreversible effects or collateral loss on undo.
-  Requires explicit option selection for gated work; silence and vague assent grant nothing.
-  Also governs delegated work under a bounded, logged, self-expiring action budget.
+  Present a completed implementation plan for human review, record approval of its version
+  and scope, and hand off to implementation or plan revision. Invoke when a plan is ready
+  or materially revised, and when the operator responds to its review panel.
 ---
 
-# Human Approval Gate
+# Human Review and Approval
 
-This skill grants nothing. It records what the operator granted and refuses everything else.
+This is the decision gate between implementation-plan and implementation.
+It presents the plan, records the decision, and hands off. It does not author solutions,
+implement changes, create recovery tools, or manage unattended delegation.
+Reversibility does not exempt an implementation plan from review.
 
-Keep authority tied to disclosed actions and consequences. Reduce the operator's reading
-burden without omitting information needed to choose or recover.
+## Inputs
+
+Receive the plan location, identifiable revision, review summary, and any prior approval.
+A document revision or content hash is sufficient; a Git commit is not required.
+User-provided plans can be reviewed without rerunning the planning skill.
+
+The plan must state the intended result, scope and exclusions, approach, acceptance checks,
+material effects, and execution prerequisites. Recovery readiness must distinguish a verified
+existing checkpoint from planned preparation, or explain why recovery is not applicable.
+Git repository existence alone does not establish that current contents are saved.
 
 ## Workflow
 
-1. Determine whether an unexpired approval already covers this exact work. If yes, proceed
-   without re-asking. If the work has drifted from what was approved, see **Expiry**.
-2. List every action this request will take, **before classifying any of them** — including
-   actions you are adding yourself, and actions that exist only to serve the ones asked for.
-   A request is a task; a task is a list. Everything below applies to the list, not to the one
-   action that looks like the point.
-3. Classify each action on the list by reversibility — the command that will actually run,
-   not the wording of the request. Load `references/irreversibility-tiers.md` and answer
-   Q1 and Q2 for the actual action and proposed undo. Examples are not an exhaustive list.
-4. If either answer remains unresolved after relevant checks, classify as Tier 2 and state
-   the missing fact. An action missing from the examples is not a reason to gate.
-5. **The task takes the highest tier on its list.** A lower-tier action gets no path of its
-   own — it is carried by the tier above it, and it stays visible there. Alone, a Tier 0 edit
-   closes with its own trace line and the operator sees it; bundled under something bigger it
-   would vanish, leaving the gate protecting it *worse* than no gate at all.
-6. Tier 0 — every action on the list — requires no gate, even when the workspace contains
-   unrelated uncommitted changes that execution and undo will preserve. Proceed without asking
-   for a reply. Check the relevant workspace state before acting, whether existing changes
-   overlap the action and its undo, and the result measured against that starting state.
-   Close in the operator's language with the result, relevant validation outcome, and a
-   concrete undo preserving existing work. For routine success, use a short paragraph plus
-   the undo command; omit a separate audit report. Include starting-state details only when
-   they explain preservation or an undo condition. Scale detail to decisions the operator
-   must make, not the number of checks performed. Failures, partial completion, and material
-   limitations remain visible. Claims must not exceed the evidence. This is a report, not
-   a request for confirmation; no fixed line count overrides necessary task information.
-7. Otherwise load `references/approval-panel.md` — now, not earlier — and render the panel per
-   **Output Contract**.
-8. Accept only consent that satisfies **Consent**. Otherwise leave execution paused and state
-   what selection is missing. Answer clarification questions without treating them as approval.
-9. Load `references/authorization-record.md` and record the granted scope: selected options,
-   their disclosed consequences and undo conditions, and their action tiers.
-10. During execution, watch the **Expiry** conditions. On any of them, stop and return here.
+1. Load references/authorization-record.md when checking prior approval. If it covers this
+   revision and scope, hand off without asking again. Otherwise inspect the plan and summary.
+2. Return missing or contradictory decision-relevant information to implementation-plan.
+   Do not invent a solution, user choice, recovery guarantee, or successful verification.
+3. Load references/approval-panel.md and display the summary, full-plan link, and choices.
+   Do not require a separate long report before the panel. Await the operator; silence does
+   not start implementation.
+4. Process the response:
+   - The explicit approval identifier approves the displayed revision and disclosed scope.
+   - Concrete adjustment feedback returns to planning; no adjustment identifier is required.
+     An adjustment identifier without feedback requires clarification.
+   - Answer questions without treating them as approval. Clarify vague assent without the
+     approval identifier; do not repeat an unchanged panel to solicit assent.
+   - Explicit cancellation ends the review. Waiting is the default, not a third panel option.
+5. On approval, load references/authorization-record.md, record authority, and hand the
+   plan and record to implementation. No second confirmation is needed for the same scope.
+   Execution must satisfy and verify pending prerequisites before affected modifications.
+6. On adjustment, hand the current plan and feedback to implementation-plan. Review the
+   revised plan when ready. Requirement changes may require upstream clarification.
 
-### Check boundaries
+## Scope and validity
 
-Use current workspace evidence to resolve Q1 and Q2, then proceed or present the panel.
-Do not repeat a resolved check without a changed fact, failed command, or conflicting result.
-Before an additional inspection, identify the missing fact and how its possible values would
-change the scope, Q1/Q2 answers, or result verification. Stop expanding once the action's reach,
-authorization, and recovery conditions are established, or a specific unresolved condition
-requires a panel. After acting, check the actual result against the intended change. Examples
-illustrate criteria; only
-observed task facts establish current state. Supporting checks with side effects belong to
-the action list and must preserve existing work just like the requested action.
+Approval covers the identified plan and its disclosed effects, not future work with the same
+title. Changes to functionality, acceptance criteria, scope, material effects, or premises
+on which approval depended require renewed review. Routine implementation choices within
+approved scope do not require command-by-command approval.
+Record purely editorial revisions without silently changing the approved meaning.
+Partial approval covers only explicitly named independent parts; resolve dependencies or
+ambiguous scope before implementation.
 
-## Refusals
+## Handoff
 
-This skill must not:
+Use the available workflow mechanism to pass the plan and decision to the next node.
+A skill file is not a dispatcher. Do not spawn an agent without runtime support and authority.
+Without automatic dispatch, state the next node and its inputs; do not claim it has started.
+Missing neighboring skills limit handoff, not standalone review of a supplied plan.
 
-- Write code, write documentation, or author a plan. Those belong to other skills.
-- Decide for itself whether the work is important, critical, or risky enough to need approval.
-  That determination comes from Q1/Q2 and the authorized scope, never from
-  this skill's own assessment.
-- Judge whether the operator's answer shows sufficient understanding. It matches identifiers;
-  it does not grade the operator.
-- Infer consent from tone, momentum, unrelated or expired approvals, or absence of objection.
-- Report a decision it already acted on and call that approval.
-- Repeat an unchanged panel to solicit assent. Replace it when material disclosure changes;
-  identify the change and make clear which version a new selection would authorize.
+## Boundaries
 
-## Consent
-
-Consent exists when the operator selects an option **by identifier** from the current panel,
-after that panel has disclosed its action scope, consequences, and undo conditions. The option
-identifier alone is sufficient; do not require a separate risk identifier or a restatement of
-the consequences. Selecting "do not proceed" authorizes no action.
-
-The selection authorizes only what that option disclosed. It does not prove the operator read
-or understood it; the agent is responsible for clear disclosure, not testing comprehension.
-If required disclosure is missing, complete the panel and obtain a selection before acting.
-
-Interpret replies by what they authorize, not by a blacklist of phrases. General assent does
-not identify an option; delegation does not select an irreversible action; a question requests
-information. The examples below illustrate these distinctions rather than enumerate replies.
-
-| The operator says | What it means here |
-|---|---|
-| "looks good" / "行" / "👍" | not consent |
-| "go ahead" / "you decide" / "别问我了" | not consent — see **Unattended Mode** |
-| a question about the plan | not consent; asking is not approving |
-| an answer to some items only | consent for exactly those items, nothing else |
-| silence | not consent |
-
-Partial consent authorizes only the items named. The remaining items stay blocked. Never widen
-a partial answer into a full one.
-
-## Unattended Mode
-
-When the operator delegates decisions, establish a bounded task list and stopping conditions.
-Delegation alone does not expand authority beyond that list or authorize higher-tier actions:
-
-- The budget is **the approved plan's Tier 0 items** — not a count, and not a clock. Work
-  through them and return; do not extend the list with items that merely look small.
-- Hard stop on the first action above the approved tier, whatever remains on the list.
-- Before each action, write a **restore credential** — a commit hash, a backup path, a
-  paste-ready undo command. Prose such as "impact: moderate" is not a credential; the test is
-  whether the operator can undo the action using the record alone.
-- The window is visible while it is open: state what remains on the list and the red line.
-- Return control when the list is exhausted, the red line is reached, or a stated premise is
-  falsified — whichever comes first.
-
-Stop between actions, never mid-action, and report three things: what is done, what is
-half-done, and the cost of abandoning versus finishing. Do not take one more action to reach a
-tidier stopping point.
-
-## Expiry
-
-An approval covers the plan that was approved and nothing else. It expires when:
-
-- A premise the plan explicitly listed is falsified during execution.
-- The action set changes — anything not present in the approved plan.
-- The reversibility tier of the remaining work rises above the approved tier.
-
-Expired approval returns to step 7. It is not renewed by the agent's own judgement that the
-change was small.
-
-A retry, substituted command, or recovery action requires a fresh classification at step 3
-before execution. Check its actual targets, side effects, and undo conditions. A command
-change alone does not expire consent when the disclosed scope and consequences remain covered.
-For an ungated task, continue silently if all actions remain Tier 0 within the requested scope.
-If new consent is needed, pause before acting and present the updated panel directly; do not
-first refuse and wait for the operator to insist. An unresolved classification is Tier 2,
-not an automatic permission to execute. This skill checks authority; implementation chooses
-how to perform the authorized work.
-
-**Upstream requirement:** `implementation-plan` must (a) list the premises its plan depends on,
-(b) present decisions in small, separately approvable units, and (c) hand over a closed list of
-items. Without listed premises there is nothing to falsify; without a closed list, unattended
-mode has no stopping point; without small units, the operator approves in bulk. In all three
-cases this gate degrades into a rubber stamp.
-
-## Output Contract
-
-The panel must:
-
-- Be readable without scrolling.
-- Contain at most 3 decisions. Beyond that the operator approves in bulk instead of deciding.
-- Use plain language. No jargon the operator would have to look up to decide.
-- Give each option a short identifier the operator can quote back. Associate consequences
-  and undo conditions with that option; they need no separate identifiers or confirmation.
-- State, for each decision: the choice, the part that cannot be undone, the risk being
-  accepted, and the undo command — the chosen option run backwards, written from the state
-  that option leaves behind.
-- Make scope, consequences, and recovery understandable from the panel itself, without
-  requiring the operator to reconstruct the implementation history.
-- Meet the 30-second reading test: even a tired operator should be able to understand the
-  pending choices, main consequences, and recovery options in about 30 seconds. This is a
-  panel usability target, not an execution deadline. Never hide necessary information to
-  meet it; follow the overflow rules when the decision cannot fit.
-
-The panel must **not** contain how the work will be done. Implementation detail is delegated
-work; it belongs in the plan, not in the gate. It is the primary cause of panel bloat.
-
-Present the review subject in one line above a table. Use separate columns for option,
-consequence, and undo, with one row per option. Only options carry identifiers. Use an em dash
-in the undo cell when no undo applies; state irreversible loss explicitly in consequences.
-For partly reversible options, list the available undo and identify the unrecoverable part.
-Follow the localized length limits and overflow rules in `references/approval-panel.md`.
+- Implementation-plan owns the solution and review summary; this skill presents them.
+- Execution/recovery tooling creates checkpoints and provides actual recovery instructions.
+  Show readiness and limitations here, not a mandatory rollback script.
+- Do not create backups, commits, or restoration mechanisms merely to display a panel.
+- Delegation is not human selection of the approval option. Personal delegation is out of scope.
 
 ## References
 
-This is a list of what exists, not a reading list. Load each one at the step that names it and
-not before — most runs need only the first. Reading all three up front spends context on every
-run, including the runs that never open a panel, which is the cost this layering exists to
-avoid.
-
-- `references/irreversibility-tiers.md`: the reversibility criteria. Load before classifying
-  any pending action, and treat any action it does not resolve as irreversible.
-- `references/approval-panel.md`: the panel template. Load when a gate has triggered and the
-  panel is about to be rendered.
-- `references/authorization-record.md`: the record format. Load when authority is granted, and
-  again before each action taken in unattended mode.
+- references/approval-panel.md: load when displaying a completed or materially revised plan.
+- references/authorization-record.md: load when checking or recording authority.

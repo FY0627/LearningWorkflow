@@ -1,64 +1,30 @@
-# Authorization Record Format
+# Plan Authorization Record
 
-Loaded by `human-approval` at Workflow step 9, and again before each action taken in
-unattended mode.
+Load when checking existing authority or recording approval.
+Use the workflow's existing task record; do not create a new file or commit requirement merely
+for this gate. The receiving executor must have access to the record.
 
-## Purpose
+## Required information
 
-Fix the format of what gets written down when authority is granted and while it is being
-spent, so the record is executable rather than descriptive.
+- Plan location and identifiable revision; preserve the reviewed version or its identity.
+- The operator's actual selection and associated panel.
+- Approved scope, exclusions, and any explicitly approved independent subset.
+- Acceptance criteria and material effects, directly or through the preserved plan.
+- Execution prerequisites and their verified or pending status.
+- Next node and handoff status: ready, handed off, or blocked with a reason.
 
-## When the window opens
+An identifier without its plan and disclosure is insufficient. Questions and adjustment
+requests are not approvals. Do not record authority the operator has not granted.
 
-Record, before the first action:
+## Validity
 
-- **Recovery for the whole unattended window**, in addition to per-action undo. Record the
-  actual source and restoration procedure covering the affected pre-window state. A Git
-  reference alone does not preserve uncommitted, untracked, or ignored content. Verify the
-  recovery coverage before relying on it; this record does not create a snapshot by itself.
-- **What was approved**: the option identifiers the operator returned, and the highest tier
-  they authorised. Preserve the selected options' disclosed action scope, consequences, and
-  undo conditions with the record; an identifier alone loses its meaning when the panel changes.
-- **The stopping condition**, stated before the run rather than judged during it.
-
-## Before each action
-
-- The action, and its tier from `irreversibility-tiers.md`.
-- Its restore credential: a paste-ready command, a commit hash, a backup path. Prose such as
-  "impact: moderate" is not a credential. The test is whether the operator can undo the action
-  from the record alone, without asking anyone.
-- Written **before** the action, never after. A credential recorded afterwards is a report.
-
-## Stopping
-
-Return control on whichever comes first:
-
-- An action classifies above the approved tier. Stop **before** taking it, not partway through.
-- The approved task list is exhausted.
-- A premise the plan listed is falsified.
-
-The task list is the approved `implementation-plan`'s item list. This skill does not author it,
-extend it, or decide that one more item belongs on it — see the refusals in `SKILL.md`. Without
-a closed list, "finish what can be finished" means "keep going".
-
-Work discovered mid-window that is not on the list is not one more Tier 0 item to absorb. It
-changes the action set, which expires the authorisation. Stop and return.
-
-If an action fails partway, inspect the resulting state before attempting recovery. Apply the
-recorded undo only if it remains applicable, covered by the authorization, and preserves other
-work. Otherwise leave execution paused and disclose the state and needed decision. Reclassify
-any substituted recovery under the entrypoint's Expiry rules; failure does not itself authorize
-new repair work. Close the unattended window and report the outcome.
-
-## When the window closes
-
-- Why it stopped: which of the three conditions fired.
-- What is done, what is half-done, and what abandoning would cost versus finishing.
-- The window restore point, repeated, so rolling back the whole run needs no searching.
+Implementation must use the approved revision and scope. Material changes return to review
+under the entrypoint's validity rules. Verify pending prerequisites before affected edits;
+an approval record does not prove preparation succeeded.
+Retain prior decisions as history when a revised plan needs new approval.
 
 ## Acceptance criteria
 
-- The operator can undo any recorded action using the record alone, without asking anyone.
-- The operator can undo the entire window using the record alone.
-- Reading the record answers: what was authorised, why it stopped, and what state the work is
-  in right now.
+- The receiver can distinguish approved work from blocked work.
+- The record distinguishes a human decision from a proposed or incomplete handoff.
+- The record does not claim to implement snapshots, rollback, or unattended delegation.
