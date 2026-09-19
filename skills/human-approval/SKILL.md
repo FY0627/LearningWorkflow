@@ -41,15 +41,20 @@ Git repository existence alone does not establish that current contents are save
 3. Load references/approval-panel.md and display the summary, full-plan link, and choices.
    Do not require a separate long report before the panel. Await the operator; silence does
    not start implementation.
-4. Process the response:
-   - The explicit approval identifier approves the displayed revision and disclosed scope.
+4. Process the response using a deterministic three-point lock:
+   - Entity lock: matches the exact revision or hash of the displayed plan.
+   - Verb lock: requires the explicit Option A / approval identifier. Vague assent
+     (e.g., "looks good", "proceed") without the identifier is held in waiting.
+   - Scope lock: covers either the entire disclosed scope ("ALL") or an explicitly
+     pre-defined independent phase in the plan.
    - Concrete adjustment feedback returns to planning; no adjustment identifier is required.
      An adjustment identifier without feedback requires clarification.
    - Answer questions without treating them as approval. Clarify vague assent without the
      approval identifier; do not repeat an unchanged panel to solicit assent.
    - Explicit cancellation ends the review. Waiting is the default, not a third panel option.
-5. On approval, load references/authorization-record.md, record authority, and hand the
-   plan and record to implementation. No second confirmation is needed for the same scope.
+5. On approval, load references/authorization-record.md, append the structured
+   authorization stamp directly to the plan document, and hand off to implementation.
+   No second confirmation is needed for the same scope.
    Execution must satisfy and verify pending prerequisites before affected modifications.
 6. On adjustment, hand the current plan and feedback to implementation-plan. Review the
    revised plan when ready. Requirement changes may require upstream clarification.
@@ -61,14 +66,17 @@ title. Changes to functionality, acceptance criteria, scope, material effects, o
 on which approval depended require renewed review. Routine implementation choices within
 approved scope do not require command-by-command approval.
 Record purely editorial revisions without silently changing the approved meaning.
-Partial approval covers only explicitly named independent parts; resolve dependencies or
-ambiguous scope before implementation.
+Partial approval is strictly restricted to explicitly pre-defined independent phases or
+modules already partitioned in the plan. Any ad-hoc scope reduction or unscheduled task
+slicing must be treated as Option B (Adjustment) and returned to implementation-plan to
+re-evaluate dependencies. Never synthesize a new task list within this skill.
 
 ## Handoff
 
-Invoke implementation only after an explicit approval has been recorded, or a supplied prior
-approval has been verified as covering the current plan. Pass the plan location and revision,
-approved scope, acceptance criteria, authority record, and outstanding execution prerequisites.
+Invoke implementation only after an explicit approval has been recorded in the plan document's
+authorization stamp, or a supplied prior approval has been verified as covering the current
+revision. Pass the plan location and revision, approved scope, acceptance criteria, authority
+record, and outstanding execution prerequisites.
 Pending prerequisites belong to implementation's preparation; they block the affected changes,
 not the handoff itself. A question, silence, adjustment, or ambiguous selection never starts it.
 
