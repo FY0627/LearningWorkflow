@@ -42,6 +42,8 @@ Git repository existence alone does not establish that current contents are save
    Do not require a separate long report before the panel. Await the operator; silence does
    not start implementation.
 4. Process the response using a deterministic three-point lock:
+   - A response that requests a material change is adjustment feedback, even if it also
+     says to start. Return the change to planning before executing affected work.
    - Entity lock: matches the exact revision or hash of the displayed plan.
    - Verb lock: requires the explicit Option A / approval identifier. Vague assent
      (e.g., "looks good", "proceed") without the identifier is held in waiting.
@@ -65,6 +67,11 @@ Approval covers the identified plan and its disclosed effects, not future work w
 title. Changes to functionality, acceptance criteria, scope, material effects, or premises
 on which approval depended require renewed review. Routine implementation choices within
 approved scope do not require command-by-command approval.
+Previously approved tasks may continue during a revision only when implementation-plan
+identifies them by stable task ID and unchanged task contract, implementation confirms no
+changed or unknown dependency, and the existing authorization covers them. If any condition
+is unproven, hold the task. Never infer approval for an unapproved task from a request to
+revise another task.
 Record purely editorial revisions without silently changing the approved meaning.
 Partial approval is strictly restricted to explicitly pre-defined independent phases or
 modules already partitioned in the plan. Any ad-hoc scope reduction or unscheduled task

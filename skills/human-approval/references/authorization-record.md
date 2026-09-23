@@ -15,12 +15,18 @@ embedded block.
 - Plan location and identifiable revision; preserve the reviewed version or its identity.
 - The operator's actual selection and associated panel.
 - Approved scope (`ALL` or an explicitly pre-defined independent phase).
+- For task-level continuation across revisions, stable task IDs, the approved task-contract
+  identity, and any dependencies whose unchanged state was verified. An unverified or changed
+  dependency suspends continuation; it does not invalidate unrelated approved work.
 - Acceptance criteria and material effects, directly or through the preserved plan.
 - Execution prerequisites and their verified or pending status.
 - Next node and handoff status: ready, handed off, or blocked with a reason.
 
 An identifier without its plan and disclosure is insufficient. Questions and adjustment
 requests are not approvals. Do not record authority the operator has not granted.
+Keep the reviewed plan content identifiable independently of this appended record: a content
+hash, if used, covers the plan body before `## Authorization Record`, not the appended stamp.
+Preserve the prior authorization when revised tasks are sent back to planning.
 
 ## Paired designed examples — not execution evidence
 
