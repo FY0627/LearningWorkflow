@@ -94,6 +94,26 @@ screenshots. That fact is recorded, not hidden.
   documented recommendations from project design choices. Keep portable skill rules
   separate from model-specific tuning.
 
+## Reference project and project memory
+
+- Use [`Nongfsq/win11-storage-governance-kit`](https://github.com/Nongfsq/win11-storage-governance-kit)
+  as a skill-authoring reference: a concise English-primary `SKILL.md`, a precise trigger
+  description, a usable workflow, explicit boundaries and output contract, and references
+  loaded only under stated conditions. Its Windows storage rules are domain-specific and
+  do not become rules for this software-delivery workflow.
+- The local authorities for this pack are [`docs/skill-authoring-standard.md`](docs/skill-authoring-standard.md),
+  [`docs/trigger-tuning.md`](docs/trigger-tuning.md),
+  [`docs/compatibility.md`](docs/compatibility.md), and
+  [`docs/workflow-fidelity.md`](docs/workflow-fidelity.md). Consult the relevant document
+  before changing skill structure, discovery text, portability, or provenance.
+- Write skill instructions in English as the primary language; produce user-facing
+  artifacts in the operator's language unless the operator requests another language.
+  Keep drafts labeled draft until actual evaluation supports promotion.
+- When the owner is co-designing skill changes, show concrete proposed edits before
+  applying them unless the current conversation has already approved those edits.
+  After an approved change, run the repository validator before committing and push
+  when the owner has requested it.
+
 ## Workflow design mentoring
 
 When the repository owner is refining workflow skills, act as a senior software architect
