@@ -1,38 +1,27 @@
 ---
 name: codebase-audit-summary
 description: >-
-  在对现有代码库进行重构、添加新功能、排查复杂样式冲突或评估组件依赖时触发此 Skill。
-  源码调研完成之后，整理输出结构化的代码库审计摘要凭据。
+  Summarize current source evidence and cross-task dependencies before changing existing
+  code. Use after source investigation when planning needs a comparable code baseline,
+  producer-consumer map, shared contracts, and known evidence gaps.
 ---
 
-# 代码库审计摘要 (codebase-audit-summary)
+# Codebase Audit Summary
 
-本 Skill 对应 `docs/workflow.md` 中的 **2. 证据收集与规划层 -> 代码库审计摘要 (codebase-audit-summary)** 节点。
+## Workflow
 
-## 目标 (Goal)
-快速梳理项目现有的组件树结构、全局样式 Token 定义、依赖库版本及全局状态分布，避免无意义的重复轮子和样式污染。
+1. Define the requested change and the investigated source scope. Record a comparable code baseline: a revision plus relevant worktree changes, or an equivalent snapshot when version control is unavailable.
+2. Review source-investigation findings and trace affected interfaces, data fields, configuration, shared state, producers, and consumers. Include UI components and design tokens when they are relevant.
+3. If a prior audit exists, compare its baseline with current code. Reinspect changed parts and unchanged consumers they may affect. Without a comparable prior baseline, investigate the task and its dependency scope afresh; expand only when shared dependencies lead farther.
+4. Record source locations, dependency relationships, and unresolved gaps. Use runtime or test evidence when dynamic access prevents reliable static tracing.
+5. Hand the scoped audit to `implementation-plan` only with a clear account of which dependency questions are resolved and which still need investigation.
 
-## 审计维度 (Audit Dimensions)
+## Boundaries
 
-1. **项目技术栈识别**：
-   - 确定框架（React, Vue, Vite, Next.js, HTML/JS）。
-   - 确定样式解决方案（Vanilla CSS, TailwindCSS, CSS Modules, Styled Components）。
-2. **组件与路由结构分析**：
-   - 梳理主页面布局与公共 UI 组件（Button, Modal, Card, Navbar）。
-3. **全局样式与 Token 定位**：
-   - 查找 `index.css`, `globals.css` 或 `theme` 配置文件，确认 CSS 变量定义情况。
-4. **潜在风险点记录**：
-   - 是否存在写死的大段行内样式 (style="...")。
-   - 是否存在旧样式与新样式的 CSS 选择器命名冲突。
+- Keep the audit scoped to the planned work; do not imply that a partial audit covers the entire repository.
+- A file search with no match or a technology inventory is not proof that tasks are independent.
+- Do not mark a material unknown dependency as absent or imply that an old summary still covers changed code.
 
-## 输出摘要模板 (Output Format)
+## Output Contract
 
-```markdown
-### 代码库审计摘要 (Codebase Audit Summary)
-- **技术栈**：[例如 Vite + React + Vanilla CSS]
-- **公共组件位置**：`src/components/`
-- **样式 Token 文件**：[例如 `src/index.css`]
-- **重构/新增功能注意事项**：
-  1. [注意事项 1]
-  2. [注意事项 2]
-```
+Provide the code baseline and comparison status; investigated scope; source evidence locations; affected contracts and producer-consumer relationships; shared dependencies; independence evidence or unresolved gaps; and any relevant project conventions. Write the user-facing summary in the user's language.

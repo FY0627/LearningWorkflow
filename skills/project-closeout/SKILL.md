@@ -1,12 +1,25 @@
 ---
 name: project-closeout
 description: >-
-  当功能开发或缺陷修复全部通过并完成验收，需要撰写 Walkthrough 总结报告并闭环结项时触发此 Skill。
+  Close a completed delivery cycle with a traceable account of user outcomes, changes,
+  verification, release status, and remaining work. Use after the applicable delivery and
+  governance tracks have reported their actual results.
 ---
 
-# 项目结项闭环 (Project Closeout)
+# Project Closeout
 
-本 Skill 对应 `docs/workflow.md` 中的 **4. 门禁与结项归档层 -> 项目结项闭环 (project-closeout)** 节点。
+## Workflow
 
-## 目标 (Goal)
-生成最终的 `walkthrough.md` 交付报告，列出所做的修改、验证截图或日志，完成终结闭环。
+1. Collect approved scope, delivered changes, verification evidence, release status, audit findings, and user outcomes.
+2. Reconcile completed work with acceptance criteria and identify deferred or failed items.
+3. Write the walkthrough and next-cycle inputs without converting unrun checks or planned releases into completed results.
+4. Return new user needs or unresolved pain points to the workflow's intake stage.
+
+## Boundaries
+
+- Do not declare the project complete while material acceptance or release status is unknown.
+- Keep evidence labels honest and preserve links to the actual artifacts.
+
+## Output Contract
+
+Produce `walkthrough.md` with delivered scope, observed outcomes, changed artifacts, validation and release evidence, remaining risks, and follow-up work. Write it in the user's language unless requested otherwise.

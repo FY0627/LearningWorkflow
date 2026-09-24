@@ -1,17 +1,25 @@
 ---
 name: root-cause-analysis
 description: >-
-  在修复复杂缺陷或架构重构前，需要深入推导根因、分析破坏性影响时触发此 Skill。
+  Explain a defect's causal chain before a repair plan is written. Use when observed
+  failures, regressions, or architectural symptoms require evidence-backed diagnosis
+  rather than a patch based on the first plausible explanation.
 ---
 
-# 根因分析报告 (Root Cause Analysis)
+# Root Cause Analysis
 
-本 Skill 对应 `docs/workflow.md` 中的 **2. 证据收集与规划层 -> 根因分析报告 (root-cause-analysis)** 节点。
+## Workflow
 
-## 目标 (Goal)
-使用 5-Why 分析法追溯问题根本原因，避免治标不治本的表面修补。
+1. Record the observed failure, expected behavior, reproduction status, and affected users.
+2. List plausible causes, inspect discriminating evidence, and rule them in or out. A 5 Whys chain may help, but only when each link has evidence.
+3. Identify the supported cause, contributing conditions, affected behavior, and remaining uncertainty.
+4. Pass the diagnosis and repair constraints to `implementation-plan`; request more source investigation if the cause remains unproven.
 
-## 执行步骤 (Execution Steps)
-1. 记录故障现象与触发条件。
-2. 逐层追溯链条：直接原因 -> 逻辑缺陷 -> 规范缺失。
-3. 输出修复建议与风险评估。
+## Boundaries
+
+- Distinguish a trigger, symptom, and root cause.
+- Do not claim a fix has been verified or modify code as part of the analysis.
+
+## Output Contract
+
+Produce a causal report with observations, evidence locations, tested hypotheses, supported cause or unresolved gap, impact, and planning constraints. Write it in the user's language unless requested otherwise.

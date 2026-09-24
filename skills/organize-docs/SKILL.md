@@ -1,9 +1,25 @@
 ---
 name: organize-docs
 description: >-
-  当项目即将结项，需要整理归档相关技术文档、设计图或架构说明时触发此 Skill。
+  Organize project documentation and evidence before closeout. Use when implemented behavior,
+  decisions, verification, and remaining work must be findable without losing provenance
+  or confusing plans with observed results.
 ---
 
-# 整理归档文档 (organize-docs)
+# Organize Documentation
 
-本 Skill 对应 `docs/workflow.md` 中的 **4. 门禁与结项归档层 -> 整理归档文档 (organize-docs)** 节点。
+## Workflow
+
+1. Inventory relevant requirements, plans, decisions, implementation notes, tests, and audit reports.
+2. Update or link documents so current behavior and historical decisions are distinguishable.
+3. Remove duplication only when the retained source preserves needed evidence and references.
+4. Hand the document index and unresolved gaps to `project-closeout`.
+
+## Boundaries
+
+- Do not rewrite an unverified plan as a completed result.
+- Do not archive private data or unrelated project files for tidiness alone.
+
+## Output Contract
+
+Report documents created or revised, their locations, source evidence, unresolved gaps, and the closeout entry point. Write user-facing content in the user's language.

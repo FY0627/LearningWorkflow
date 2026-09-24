@@ -1,12 +1,25 @@
 ---
 name: e2e-verify
 description: >-
-  当前端或全栈功能集成完毕，需要进行端到端视觉与集成校验时触发此 Skill。
+  Verify complete user journeys against approved acceptance criteria after implementation
+  is integrated. Use when behavior must be checked across UI, API, data, or service
+  boundaries; visual appearance is evaluated separately by visual-e2e-verify.
 ---
 
-# 集成与视觉端到端验证 (E2E Verification)
+# End-to-End Verification
 
-本 Skill 对应 `docs/workflow.md` 流程图中的 **3. 代码实施层 -> 视觉与端到端集成验证 (Visual & E2E Verification)** 节点。
+## Workflow
 
-## 目标 (Goal)
-运行 E2E 测试或自检检查清单，验证功能无退化与视觉无坍塌。
+1. Read the approved acceptance criteria and identify representative user journeys and failure paths.
+2. Run available end-to-end checks or perform documented manual journeys against the candidate revision.
+3. Compare actual outcomes with expected behavior, capture evidence, and report gaps to `implementation`.
+4. Pass a verified candidate and remaining limitations to `github-actions-ci` when the workflow requires that gate.
+
+## Boundaries
+
+- Do not replace a failed or unavailable journey check with an assumption that unit tests cover it.
+- Do not claim visual acceptance from a behavioral test unless visual evidence was separately inspected.
+
+## Output Contract
+
+Report the candidate revision, journeys attempted, expected and observed outcomes, failures, evidence, and unrun scenarios. Write the user-facing report in the user's language.

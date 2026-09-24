@@ -1,23 +1,29 @@
 ---
 name: implementation
 description: >-
-  当实施计划已获批准，开始具体编写与修改代码时触发此 Skill。
+  Execute an explicitly approved implementation plan and coordinate authorized tasks.
+  Use after human approval when source changes, task delegation, verification, and
+  mid-execution change control must stay within the approved revision and scope.
 ---
 
-# 代码实施 (implementation)
+# Implementation
 
-本 Skill 对应 `docs/workflow.md` 中的 **3. 代码实施层 -> 代码实施 (implementation)** 节点。
+## Workflow
 
-## 人工评审交接
+1. Read the approved plan and authorization record. Verify the plan revision, approved task scope, acceptance checks, and pending prerequisites. Return missing or invalid authority to `human-approval`; do not ask again when existing authority is valid.
+2. Before dispatch and when code state changes, compare the plan's source baseline and audit scope with current code. Track expected changes from approved tasks separately from unplanned changes. A repository revision difference alone does not invalidate every task.
+3. Establish and verify required checkpoints or other execution prerequisites before affected modifications.
+4. Execute approved tasks directly or delegate bounded work when the host supports it and prerequisites are met. Give each child agent the task ID, plan revision, input and output contracts, dependencies, acceptance checks, and allowed change scope.
+5. On user feedback or unplanned source changes, pause affected and unknown-impact tasks and child agents. Record completed, active, and unstarted work; confirm agents have actually stopped before using their results.
+6. Send evidence gaps from unplanned changes to `report-source` and `codebase-audit-summary`, then send affected work to `implementation-plan` for revision and `human-approval` for renewed review. Route material changes to functionality, scope, acceptance, effects, or premises through the same plan and review path.
+7. Complete authorized work, verify outcomes, and report results and a concrete recovery entry point.
 
-- 接收已批准计划与授权记录，核对版本、范围、验收标准和待完成前提。
-- 缺少有效批准时交回 `human-approval`；已有有效批准时不重复询问。
-- 分派前及代码状态变化时，对照获批计划记录的代码基线、审计范围与实际代码状态，并记录已批准任务造成的预期改动，避免将其误判为计划外变化。不能仅凭整个仓库的版本号不同判定所有任务失效。
-- 对计划外变化，核查变动部分及其消费者是否影响任务契约。暂停受影响及影响未知的任务和子 Agent，确认停止状态；将证据缺口交回 `report-source` / `codebase-audit-summary` 增量调查，再由 `implementation-plan` 修订受影响任务并交 `human-approval` 重新审核。能证明目标、契约、依赖、验收及原授权均不变的任务可继续。
-- 修改前落实并验证计划中的检查点等前提，不能把批准当作准备已经完成。
-- 范围内正常实现选择继续执行；功能、范围、验收或主要后果等实质变化返回计划修订与评审。
-- 分派时向每个子 Agent 传递获准的任务编号、计划版本、输入输出契约、依赖、验收标准及允许修改的范围；未获准或前提未满足的任务不得启动。
-- 实施期间收到用户变更时，先暂停可能受影响及影响未知的任务和子 Agent，记录已完成、进行中及未开始的状态；暂停请求不等于子 Agent 已停止，确认停止状态后再处理其产物。
-- 仅当原授权仍覆盖该任务，且能根据计划契约证明目标、输入输出、共享依赖、验收标准、主要影响和执行前提均未变化时，才继续未受影响的任务。文件范围不重叠本身不是充分证据；无法证明时保持暂停。
-- 将变更、执行状态和影响判断交回 `implementation-plan` 修订受影响任务，再由 `human-approval` 审核新范围。不得把旧授权扩展到修订后的任务。
-- 完成后提供结果、验证情况和实际恢复入口，需要时提供具体恢复操作。
+## Change Control
+
+- Continue an unaffected task only when the original approval still covers it and its goal, contracts, shared dependencies, acceptance checks, material effects, and prerequisites remain unchanged. Disjoint file names alone do not prove independence.
+- Hold a task when impact cannot be established. Never extend old approval to revised work.
+- Routine implementation choices within the approved scope do not need command-by-command approval.
+
+## Output Contract
+
+Report completed and held task IDs, actual changes, verification results, deviations from the plan, renewed approvals, and available recovery steps or entry points. Distinguish observed results from unrun checks. Write the user-facing report in the user's language.

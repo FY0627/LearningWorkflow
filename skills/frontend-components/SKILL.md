@@ -1,34 +1,29 @@
 ---
 name: frontend-components
 description: >-
-  当需要编写、修改或重构前端 UI 组件、页面布局、CSS 样式或交互逻辑时触发此 Skill。
-  用于指导高质量 UI 实现、确保遵循 Design System 规范与防御性设计原则。
+  Build or revise approved user-interface components against the product requirements and
+  settled API contracts. Use for pages, interaction states, responsive layout, and styles;
+  respect an existing design system before introducing a new one.
 ---
 
-# 前端视图组件开发 (Frontend Components)
+# Frontend Components
 
-本 Skill 对应 `docs/workflow.md` 中的 **3. 代码实施层 -> 前端视图组件 (frontend-components)** 节点。
+## Workflow
 
-## 目标 (Goal)
-交付符合高端视觉美学 (Premium Aesthetic)、具备流体响应式 (Fluid Responsive) 且代码干净无臃肿的前端组件。
+1. Read the approved task, user scenarios, interface contract, project design system, and acceptance checks.
+2. Inspect existing components, tokens, accessibility patterns, and responsive behavior before changing UI code.
+3. Build the required states and interactions, then inspect the result across the relevant screen sizes and input methods.
+4. Report changed components, observed behavior, and remaining visual or interaction risks to `implementation` and `visual-e2e-verify`.
 
-## 核心设计规范 (Design System Rules)
+## Boundaries
 
-详细的设计禁区与美学要求见：
-[ui-design-rules.md](./references/ui-design-rules.md)
+- User needs and the project's design system determine visual choices. Do not impose a generic visual theme over explicit product direction.
+- A settled API contract may not be changed silently to simplify a component.
 
-关键要点：
-1. **语义化 HTML5**：正确使用 `<header>`, `<main>`, `<nav>`, `<article>`, `<button>` 等语义化标签。
-2. **设计系统 Token 优先**：统一在 CSS 根节点声明变量（Hsl 颜色、字号、间距、圆角与 Shadow）。
-3. **交互与微动画**：所有按钮、卡片添加流畅的 `:hover`, `:active`, `transition` 效果。
+## Output Contract
 
-## 执行步骤 (Execution Steps)
+Provide changed components, supported states, responsive and accessibility checks, API assumptions, and verification status. Write user-facing content in the user's language.
 
-1. **检查与设计 Token 定义**：查看现有 `index.css` 或样式文件是否有统一的色彩与字号 Token。
-2. **编写组件结构**：按 Functional-Driven 理念构建结构，不堆砌无意义的装饰性节点。
-3. **样式与响应式注入**：确保组件在移动端 (Mobile)、平板 (Tablet) 和桌面端 (Desktop) 自适应流体缩放。
-4. **自检与禁区排查**：对照 [ui-design-rules.md](./references/ui-design-rules.md) 检查是否有俗套设计（如强加网格背景、紫光深色调等）。
+## References
 
-## 成果验证 (Verification)
-- 检查 HTML 唯一 ID 标记是否完整。
-- 确认组件无硬编码 static pixel 冲突。
+- [references/ui-design-rules.md](references/ui-design-rules.md): load when creating a new visual direction or evaluating design choices without an established project design system; use it as guidance under the product requirements.

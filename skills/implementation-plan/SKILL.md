@@ -1,39 +1,29 @@
 ---
 name: implementation-plan
 description: >-
-  在真正编写代码前，需要生成分步骤、带文件清单和验证方案的架构实施计划时触发此 Skill。
+  Convert requirements, diagnosis, and current code evidence into a versioned implementation
+  plan for human review. Use before code changes when task boundaries, dependencies,
+  acceptance checks, and recovery readiness must be explicit.
 ---
 
-# 实施计划生成 (Implementation Plan)
+# Implementation Plan
 
-本 Skill 对应 `docs/workflow.md` 中的 **2. 证据收集与规划层 -> 生成实施计划 (implementation-plan)** 节点。
+## Workflow
 
-## 目标 (Goal)
-生成标准 `implementation_plan.md` 产物，包含需求概要、待修改/新建的文件列表、组件关系及自动化/手动验证计划。
+1. Gather the relevant requirements, root-cause analysis, and codebase audit. For changes to existing code, require an audit covering the proposed scope, a comparable source baseline including relevant uncommitted changes, evidence locations, and a comparison with current code. A settled feature request alone is not code evidence.
+2. If the audit is missing, stale, or not comparable, return to `report-source` and `codebase-audit-summary`. Reinspect changes since a known baseline and their affected consumers. Without a baseline, reinvestigate the task and dependency scope. Expand the investigation when shared dependencies are found.
+3. Write stable task IDs. For each task, state the goal, input and output contracts, proposed file or component scope, shared interfaces or state, dependencies, acceptance checks, and execution prerequisites. Mark which tasks may run in parallel and why.
+4. Treat a missing dependency as unknown, never as independent. Continue investigation when a material dependency remains unknown; do not hand the plan to `human-approval` yet.
+5. State the result, scope and exclusions, material effects, verification, and recovery readiness. Distinguish a verified existing checkpoint, a checkpoint still to prepare, and a justified not-applicable case. A Git repository alone is not a saved checkpoint.
+6. On implementation feedback, classify affected, downstream, unaffected, and unknown-impact tasks against their contracts. Revise only affected work, preserve stable IDs and existing authorization for unchanged tasks, and version the revised plan.
+7. When the plan and review summary are complete, load and follow `human-approval` in the same task when available. Hand over the plan location, version, and summary without a separate permission question. If unavailable, provide the plan entry point and keep implementation stopped.
 
-## 规则限制 (Boundary)
-- **只生成实施计划 Markdown 文档，严禁修改任何源代码**。
-- 引导用户进行评审并获取授权 (Human Approval Gate)。
+## Boundaries
 
-## 计划与审核摘要
+- Produce a Markdown plan only; do not change source code or create backups or commits merely to finish planning.
+- A planning handoff does not authorize child agents or implementation. Do not skip review because an action appears reversible.
+- Requirement changes return to intent or requirements work. Local solution revisions return to this plan without repeating unrelated upstream work.
 
-- 标识计划版本，写明目标、范围与排除项、实施步骤、涉及文件或组件、验收方法、主要影响及执行前提。
-- 涉及现有代码时，先取得覆盖本次改动的代码库审计摘要。计划须记录摘要位置、可比较的代码基线（包括相关未提交改动或等效快照）、调查范围、与当前代码的核对结论，以及关键接口、状态和生产者/消费者的证据出处。`feature-ready` 只表示需求规格足够明确，不代替代码证据。
-- 摘要缺失、无法与当前代码比较或已过期时，退回 `report-source` / `codebase-audit-summary` 对本次任务范围重新调查。已知基线之后有变化时，增量复核变动部分及其受影响的消费者；没有可比较的基线时，重新调查本次任务及其依赖范围。发现共享依赖就扩大调查，不默认重审整个仓库。
-- 将可分派工作列成稳定编号的任务。每项写明目标、输入与输出契约、预计修改范围、共享接口或状态、依赖任务、验收标准和执行前提；标出可并行与必须等待的关系。
-- 独立性需有依据：检查共享接口、数据结构、认证或配置等跨文件依赖。仅仅文件或接口名称不同，不足以证明独立；调查中无法确认的依赖标记为未知，不写成无依赖。关键依赖仍未知时继续调查，不将计划交给 `human-approval`。
-- 收到实施期间的变更反馈时，依据任务契约列出受影响、下游受影响、未受影响及影响未知的任务和理由；只修订需要修订的方案，保留未变任务的身份与已批准范围。影响未知的任务不能列入可继续清单。
-- 提供快速审核摘要：做什么、预期结果与验收、主要影响、恢复准备。
-- 恢复准备区分已建立并验证、待建立、不适用及原因；不能把存在 Git 当作当前内容已保存。
-- 此节点只描述恢复要求和已知状态，不为生成计划而实施备份、提交或代码修改。
+## Output Contract
 
-## 完成后自动交接
-
-计划及摘要完成后，在同一任务中读取并调用可用的 `human-approval`，交付计划路径、版本和摘要，
-由它直接展示审核面板。不先输出完整长文再询问是否启动审核，也不因操作可逆跳过审核。
-自动调用依赖宿主的交接能力；无调度器时，当前 agent 可按人工评审 skill 继续。
-若 skill 不可用，说明缺失并提供计划入口，保持实施未启动，不宣称已经授权。
-这条规则不自动授权创建子 agent。
-
-收到调整反馈后修订计划、更新版本、说明实质变化，再交回人工评审。
-需求变化才返回需求澄清，不因局部方案修改重复全部上游流程。
+Produce `implementation_plan.md` with a revision identifier; goals and scope; referenced evidence and code baseline; task contracts, dependencies, and independence reasons; acceptance and verification; material effects; prerequisites; and recovery readiness. Provide a concise review summary. Write user-facing content in the user's language.

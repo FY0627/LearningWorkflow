@@ -1,12 +1,25 @@
 ---
 name: security-audit
 description: >-
-  在代码准备提交或流向 CI 流水线前，进行代码安全扫描、敏感信息泄露防范和硬编码密钥检查时触发此 Skill。
+  Review an implementation candidate for security defects and sensitive-data exposure.
+  Use on the security track after a candidate is available, alongside release governance;
+  findings must refer to inspected code and actual checks.
 ---
 
-# 代码安全审计 (Security Audit)
+# Security Audit
 
-本 Skill 对应 `docs/workflow.md` 中的 **4. 门禁与结项归档层 -> 代码安全审计 (security-audit)** 节点。
+## Workflow
 
-## 目标 (Goal)
-扫描代码中的高危安全隐患（XSS, SQL 注入, 越权漏洞及 API Key 硬编码）。
+1. Identify the candidate revision, changed components, exposed interfaces, and relevant threat surfaces.
+2. Inspect authorization, input handling, data exposure, dependency changes, and secret handling where applicable.
+3. Run available security checks, verify findings against source evidence, and distinguish confirmed issues from uncertain leads.
+4. Route required fixes to `implementation` and report audit status to release and documentation tracks.
+
+## Boundaries
+
+- Do not present a scan with no findings as proof that no vulnerabilities exist.
+- Do not include credentials or private data in reusable audit reports.
+
+## Output Contract
+
+Report inspected scope and revision, methods run, findings with evidence and severity, unresolved coverage gaps, and remediation status. Write the user-facing report in the user's language.

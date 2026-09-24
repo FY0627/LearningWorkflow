@@ -114,6 +114,14 @@ Missing neighboring skills limit handoff, not standalone review of a supplied pl
 - Do not create backups, commits, or restoration mechanisms merely to display a panel.
 - Delegation is not human selection of the approval option. Personal delegation is out of scope.
 
+## Output Contract
+
+Before a decision, show the plan revision, concise outcome and scope summary, material effects,
+recovery readiness, full-plan entry point, and explicit approval or adjustment choices.
+After a decision, record the exact authorized revision and scope or the concrete feedback to
+return to planning. Never claim implementation has started without a valid authorization and
+supported handoff. Use the operator's language for user-facing content.
+
 ## References
 
 - references/approval-panel.md: load before rendering a new or revised review panel. A reply

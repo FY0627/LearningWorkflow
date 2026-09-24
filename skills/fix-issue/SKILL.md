@@ -1,17 +1,24 @@
 ---
 name: fix-issue
 description: >-
-  当用户提出具体的 Bug、程序报错、功能异常或逻辑缺陷修补请求时触发此 Skill。
+  Triage a reported defect and collect reproducible evidence before root-cause analysis or
+  requirements work. Use for errors, regressions, or incorrect behavior; this routing node
+  does not authorize an immediate patch.
 ---
 
-# 修复问题 (Fix Issue)
+# Fix Issue
 
-本 Skill 对应 `docs/workflow.md` 中的 **1. 入口与分流层 -> 修复问题 (fix-issue)** 节点。
+## Workflow
 
-## 目标 (Goal)
-重现问题现象，收集完整的错误日志/凭据 (Evidence)，并输出供后续分析的诊断结论。
+1. Record expected and actual behavior, reproduction steps, environment, and observed impact.
+2. Inspect available logs, failing checks, and relevant source locations. Record what was actually observed and what remains unverified.
+3. Route causal uncertainty to `root-cause-analysis`. Route unclear intended behavior to `requirements-spec`.
 
-## 执行步骤 (Execution Steps)
-1. **收集日志凭据**：读取未截断的崩溃日志、Terminal 报错或控制台输出。
-2. **定位相关文件**：确定引发异常的代码模块与行号。
-3. **交付产物**：流转至 `root-cause-analysis` 或 `implementation-plan` 节点。
+## Boundaries
+
+- Do not treat an error message or suspected file as a proven root cause.
+- Do not bypass planning and human approval merely because the request is called a bug fix.
+
+## Output Contract
+
+Provide reproduction status, exact evidence locations, affected behavior, known constraints, open questions, and the next evidence node. Write the user-facing summary in the user's language.

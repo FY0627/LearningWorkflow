@@ -1,13 +1,25 @@
 ---
 name: subagents-overview
 description: >-
-  当任务涉及大批量代码修改、模块间相互独立或需要并行研发（如后端 API 与前端 UI 拆分）时触发此 Skill。
-  用于产出子 Agent 任务总览与分工边界。
+  Map approved implementation tasks to bounded subagent assignments when parallel work is
+  useful. Use after an authorized plan identifies task contracts and dependencies; do not
+  invent approval or assume that every workflow node needs a separate agent.
 ---
 
-# 子 Agent 任务总览 (subagents-overview)
+# Subagents Overview
 
-本 Skill 对应 `docs/workflow.md` 中的 **3. 代码实施与并行处理层 -> 子 Agent 任务总览 (subagents-overview)** 节点。
+## Workflow
 
-## 目标 (Goal)
-将复杂任务解耦拆分，分发给不同的子 Agent 独立并发执行，并明确各子任务之间的接口契约与合并顺序。
+1. Read the approved task IDs, contracts, dependencies, acceptance checks, and allowed scopes from `implementation`.
+2. Identify tasks that can run concurrently based on shared interfaces, state, and files. Keep dependent or unknown-impact tasks sequenced or held.
+3. Define each assignment's input, deliverable, change boundary, owner, and integration point.
+4. Return the assignment map to `implementation` for runtime dispatch and status control.
+
+## Boundaries
+
+- A task matrix is not permission to spawn agents. Dispatch depends on the host's capabilities and the approved scope.
+- Do not split approved tasks into new work that changes contracts or effects without revising the plan.
+
+## Output Contract
+
+Provide a task-to-agent matrix with stable IDs, dependencies, interface contracts, allowed files or components, acceptance checks, and sequencing reasons. Write user-facing content in the user's language.
