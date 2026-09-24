@@ -41,9 +41,11 @@ flowchart TD
     RCA --> PLAN
     AUDIT --> PLAN
     READY --> PLAN
+    PLAN -.->|代码证据缺失或过期| RESEARCH
 
     PLAN --> APPROVAL["人工评审与授权<br/>Human Review & Approval (human-approval)"]
     APPROVAL --> IMPL["代码实施<br/>Implementation (implementation)"]
+    IMPL -.->|相关代码状态变化| RESEARCH
 
     %% ==========================================
     %% 3. 代码实施与并行处理层
@@ -103,6 +105,11 @@ flowchart TD
 
 **人工授权是硬门禁，不是建议。** `implementation-plan` 无法绕过 `human-approval` 直达
 `implementation`。人负责设定目标、把关架构、承担风险；Agent 矩阵负责执行与自我纠错。
+
+**需求明确不代表现有代码证据仍然有效。** `feature-ready` 表示需求结果已明确，可以进入规划；
+涉及现有代码时，还需要覆盖本次任务、具有可比较代码基线的审计摘要。证据缺失或过期时，
+先退回源码调研与范围内审计，再提交评审。实施节点对照获批计划的基线与当前代码；
+计划外变化若影响任务，就沿同一证据与审批路径处理。经证明不受影响且仍获原授权的任务可继续。
 
 **并行段是编织结构，不是两条平行直轨。** 先散开到 `subagents-overview` 与 `sandbox-test`，
 在 `api-backend-agents` 汇聚，再散开到 `frontend-components` 与 `code-consolidation`，

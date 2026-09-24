@@ -127,6 +127,13 @@ Mermaid `flowchart TD` 由 dagre 布局。两条性质使得即使文字不可�
 我没有去抠像素，而是按语义定夺：`e2e-verify` 失败与 `github-actions-ci` 失败
 是两类失败、两条诊断路径，因此分设两条回退边。**这是设计，不是复刻。**
 
+### 5. 代码证据时效性的回退边
+
+虚线 `implementation-plan → report-source` 和 `implementation → report-source` 是本项目新增的
+流程设计，并非声称打码原图中可见这些连线。代码证据缺失或过期时，计划先退回范围内的源码调查；
+实施期间若相关计划外代码变化使获批计划的依据失效，也经同一路径补充调查、修订并重新审批。
+`feature-ready` 只表示需求结果已经明确，不代表现有代码库的证据仍有效。
+
 ## 待决问题
 
 1. **`feature-ready` 的 rank 位置。** 原图中它似乎位于**证据层 rank 的最右侧**，

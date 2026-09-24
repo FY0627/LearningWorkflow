@@ -137,6 +137,15 @@ Rather than guess at pixels, I resolved this on semantics: `e2e-verify` failing 
 `github-actions-ci` failing are different failures with different diagnoses, so they get
 separate return edges. **This is design, not replication.**
 
+### 5. Evidence freshness return edges
+
+The dashed `implementation-plan → report-source` and `implementation → report-source`
+edges are workflow design additions, not claims about visible edges in the redacted source.
+They route missing or stale code evidence back to scoped investigation before a plan is
+reviewed, or when relevant unplanned source changes invalidate an approved plan's premises.
+`feature-ready` signals that the requested outcome is specified; it does not establish
+current evidence about an existing codebase.
+
 ## Open questions
 
 1. **`feature-ready` rank placement.** In the source it appears to sit at the evidence

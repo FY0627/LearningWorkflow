@@ -30,6 +30,9 @@ The plan must state the intended result, scope and exclusions, approach, accepta
 material effects, and execution prerequisites. Recovery readiness must distinguish a verified
 existing checkpoint from planned preparation, or explain why recovery is not applicable.
 Git repository existence alone does not establish that current contents are saved.
+For changes to existing code, the plan must identify the relevant audit summary, comparable
+source baseline, evidence coverage, and the planner's comparison with current code. These
+are completeness fields for this gate, not a request to re-audit code here.
 
 ## Workflow
 
@@ -37,6 +40,10 @@ Git repository existence alone does not establish that current contents are save
    and check its revision and scope. If valid, hand off without asking again. If no prior
    approval is present, inspect the plan and summary without loading that reference.
 2. Return missing or contradictory decision-relevant information to implementation-plan.
+   For changes to existing code, a missing audit summary, baseline, coverage, or comparison,
+   or a plan that reports stale evidence or unresolved material dependencies, blocks a review
+   panel. Return the evidence gap to planning; do not independently judge source dependencies
+   or infer safety from the existence of an audit document.
    Do not invent a solution, user choice, recovery guarantee, or successful verification.
 3. Load references/approval-panel.md and display the summary, full-plan link, and choices.
    Do not require a separate long report before the panel. Await the operator; silence does

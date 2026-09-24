@@ -44,9 +44,11 @@ flowchart TD
     RCA --> PLAN
     AUDIT --> PLAN
     READY --> PLAN
+    PLAN -.->|missing or stale code evidence| RESEARCH
 
     PLAN --> APPROVAL["Human Review & Approval<br/>(human-approval)"]
     APPROVAL --> IMPL["Implementation<br/>(implementation)"]
+    IMPL -.->|relevant source drift| RESEARCH
 
     %% ==========================================
     %% 3. Implementation and parallel execution
@@ -108,6 +110,13 @@ flowchart TD
 **Human authorization is a hard gate, not a suggestion.** `implementation-plan` cannot
 reach `implementation` without passing through `human-approval`. The operator sets goals,
 approves architecture, and accepts risk; the agent matrix executes and self-corrects.
+
+**Clear requirements do not establish current code evidence.** `feature-ready` may enter
+planning when the requested outcome is specified, but changes to existing code need a
+relevant codebase audit with a comparable source baseline. Missing or stale evidence returns
+to source investigation and a scoped audit before review. Implementation compares the
+approved baseline with current code and routes relevant unplanned changes through the same
+evidence and approval path; unaffected authorized tasks may continue when proven independent.
 
 **The parallel section is braided, not two straight rails.** Fan out to
 `subagents-overview` and `sandbox-test`, sync at `api-backend-agents`, fan out again to
