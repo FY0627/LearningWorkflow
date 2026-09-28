@@ -24,6 +24,22 @@ description: >-
 - Hold a task when impact cannot be established. Never extend old approval to revised work.
 - Routine implementation choices within the approved scope do not need command-by-command approval.
 
+## Code Delivery Readiness
+
+- Complete the approved implementation and run the relevant self-checks.
+  Diagnose and repair defects that prevent the approved work from meeting
+  its requirements; do not hand known-defective work to the user as a
+  completed deliverable.
+- If necessary information, permissions, or tools prevent further progress,
+  report the specific blocker and what is needed to proceed. Keep the work
+  incomplete; a blocker report is not code delivery.
+- An existing issue does not block code delivery only when evidence shows
+  that it predates the changes and does not compromise the approved work
+  or its dependencies. Disclose the issue, impact, and verification limits.
+  Investigate uncertain impact before declaring readiness.
+- Code delivery readiness does not establish downstream acceptance,
+  security, CI, release, or project completion.
+
 ## Output Contract
 
 Report completed and held task IDs, actual changes, verification results, deviations from the plan, renewed approvals, and available recovery steps or entry points. Distinguish observed results from unrun checks. Write the user-facing report in the user's language.
