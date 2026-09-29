@@ -23,7 +23,14 @@ not restart plan generation or require another panel before processing the respo
 ## Inputs
 
 Receive the plan location, identifiable revision, review summary, and any prior approval.
-A document revision or content hash is sufficient; a Git commit is not required.
+A document revision or content hash identifies the review target; its plan body
+and key decision evidence must also remain retrievable as presented.
+A Git commit is not required.
+Before presenting the panel, ensure the review target and its key decision
+evidence are preserved. If preservation is missing, preserve the supplied
+content directly when authorized and feasible; otherwise request the missing
+material from the user or planning role. This is a completeness check, not a
+new source audit, and does not require an upstream skill.
 User-provided plans can be reviewed without rerunning the planning skill.
 
 The plan must state the intended result, scope and exclusions, approach, acceptance checks,

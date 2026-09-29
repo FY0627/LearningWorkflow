@@ -95,4 +95,16 @@ Provide a concise delivery summary, linking existing artifacts where possible:
   actual handoff status, and the information needed to inspect and check
   the candidate.
 
+Preserve reported implementation results and the key verification evidence
+supporting them, linked to the authorized plan revision and candidate identity.
+Later changes, repairs, retests, or corrections must add distinguishable records
+linked to the earlier results, without overwriting them or their key evidence.
+Key evidence means material needed to support approval or verification conclusions;
+it does not require archiving every conversation or tool output.
+
+Use the project's existing record organization; otherwise group records by change
+or work item. Current-state documents and indexes may be updated in place while
+preserving content used for approval. This does not require a new record for every
+conversation, wording edit, or tool call.
+
 Write user-facing content in the user's language.

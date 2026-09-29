@@ -12,7 +12,8 @@ embedded block.
 
 ## Required information
 
-- Plan location and identifiable revision; preserve the reviewed version or its identity.
+- Plan location and identifiable revision, with access to the preserved reviewed
+  body and key decision evidence.
 - The operator's actual selection and associated panel.
 - Approved scope (`ALL` or an explicitly pre-defined independent phase).
 - For task-level continuation across revisions, stable task IDs, the approved task-contract
@@ -26,7 +27,10 @@ An identifier without its plan and disclosure is insufficient. Questions and adj
 requests are not approvals. Do not record authority the operator has not granted.
 Keep the reviewed plan content identifiable independently of this appended record: a content
 hash, if used, covers the plan body before `## Authorization Record`, not the appended stamp.
-Preserve the prior authorization when revised tasks are sent back to planning.
+Append decisions and corrections without replacing earlier records or changing
+the reviewed plan body. Link each correction to the record it corrects.
+Preserve prior authorization with its corresponding plan revision when revised
+tasks return to planning; it does not authorize the new revision.
 
 ## Paired designed examples — not execution evidence
 

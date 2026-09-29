@@ -26,4 +26,17 @@ description: >-
 
 ## Output Contract
 
-Produce `implementation_plan.md` with a revision identifier; goals and scope; referenced evidence and code baseline; task contracts, dependencies, and independence reasons; acceptance and verification; material effects; prerequisites; and recovery readiness. Provide a concise review summary. Write user-facing content in the user's language.
+Produce a Markdown implementation plan at an identifiable location and revision; goals and scope; referenced evidence and code baseline; task contracts, dependencies, and independence reasons; acceptance and verification; material effects; prerequisites; and recovery readiness. Provide a concise review summary. Write user-facing content in the user's language.
+
+Follow the project's existing document organization when it supports traceability;
+otherwise group records by change or work item. No fixed directory layout is required.
+
+Before presenting a plan for approval, preserve its body and the key evidence
+supporting the decision. Keep submitted revisions recoverable when revising them.
+For references to evolving requirements, interfaces, or architecture documents,
+retain the relevant content or a retrievable immutable revision, with its source
+and context. A mutable path, version label, or hash alone cannot restore content.
+
+Current-state documents may continue to be updated in place. Preserve only what is
+needed to reconstruct the decision; do not copy all documentation or create a new
+record for every conversation, wording edit, or tool call.
